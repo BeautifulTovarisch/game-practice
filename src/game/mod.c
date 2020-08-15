@@ -1,4 +1,6 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <unistd.h>
 
 #include "mod.h"
 
@@ -29,6 +31,8 @@ bool Game_init(const char *title, int x_pos, int y_pos, int width, int height,
     printf("Renderer creation failed: %s\n", SDL_GetError());
     return false;
   }
+
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
   is_running = true;
 
