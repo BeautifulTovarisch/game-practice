@@ -10,18 +10,18 @@ int main() {
   int frame_time;
 
   // Initialize graphics
-  if (!Game_init("Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800,
+  if (!Game_Init("Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800,
                  600, false)) {
     printf("Game failed to initialize: %s\n", SDL_GetError());
   }
 
-  while (Game_is_running()) {
+  while (Game_IsRunning()) {
 
     frame_start = SDL_GetTicks();
 
-    Game_events();
-    Game_update();
-    Game_render();
+    Game_Events();
+    Game_Update();
+    Game_Render();
 
     frame_time = SDL_GetTicks() - frame_start;
 
@@ -30,5 +30,5 @@ int main() {
     }
   }
 
-  Game_clean();
+  Game_Clean();
 }

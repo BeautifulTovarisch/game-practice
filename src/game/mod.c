@@ -9,7 +9,7 @@ bool is_running = false;
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 
-bool Game_init(const char *title, int x_pos, int y_pos, int width, int height,
+bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
                bool fullscreen) {
 
   int full = fullscreen ? SDL_WINDOW_FULLSCREEN : 0;
@@ -41,7 +41,7 @@ bool Game_init(const char *title, int x_pos, int y_pos, int width, int height,
   return true;
 }
 
-void Game_events() {
+void Game_Events() {
   SDL_Event event;
   SDL_PollEvent(&event);
 
@@ -54,16 +54,16 @@ void Game_events() {
   }
 };
 
-void Game_update(){
+void Game_Update(){
     //
 };
 
-void Game_render() {
+void Game_Render() {
   SDL_RenderClear(renderer);
   SDL_RenderPresent(renderer);
 };
 
-void Game_clean() {
+void Game_Clean() {
   SDL_DestroyWindow(window);
   SDL_DestroyRenderer(renderer);
   SDL_Quit();
@@ -71,4 +71,4 @@ void Game_clean() {
   printf("Cleanup complete.\n");
 };
 
-bool Game_is_running() { return is_running; }
+bool Game_IsRunning() { return is_running; }

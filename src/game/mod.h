@@ -9,16 +9,16 @@ extern bool is_running;
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;
 
-bool Game_init(const char *title, int x_pos, int y_pos, int width, int height,
+bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
                bool fullscreen);
 
-void Game_events();
+void Game_Events();
 
-void Game_update();
-void Game_render();
+void Game_Update();
+void Game_Render();
 
-void Game_clean();
+void Game_Clean();
 
-bool Game_is_running();
+bool Game_IsRunning();
 
 #endif
