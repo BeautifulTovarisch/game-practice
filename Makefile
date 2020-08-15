@@ -18,4 +18,7 @@ main: src/main.o $(SUBDIRS)
 clean:
 	rm -f src/main src/main.o
 
-	$(MAKE) clean -C $(SUBDIRS)
+# Recurse into each subdir and execute make clean
+	for dir in $(SUBDIRS); do \
+		$(MAKE) clean -C $$dir; \
+	done

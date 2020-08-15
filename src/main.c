@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
+#include "bootstrap/mod.h"
+
 const int SCR_W = 640;
 const int SCR_H = 480;
 
