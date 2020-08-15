@@ -1,7 +1,7 @@
 # -*- Makefile -*-
 
-SRC := $(wildcard src/*.c)
-OBJ := $(wildcard SRC:.c=.o)
+SRC := $(wildcard src/**/*.c)
+OBJ := $(SRC:.c=.o)
 
 SUBDIRS := $(wildcard src/*/.)
 

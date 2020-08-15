@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
-#include <stdbool.h>
+
+#include "mod.h"
 
 bool Bootstrap_init() {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {

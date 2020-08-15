@@ -1,6 +1,6 @@
 # -*- Makefile -*-
 
-module.o: mod.c mod.h
+mod.o: mod.c mod.h
 	gcc -c mod.c -o mod.o
 
 clean:
