@@ -3,6 +3,6 @@
 
 #include <SDL2/SDL_image.h>
 
-SDL_Texture *TM_load_texture(const char *asset, SDL_Renderer *renderer);
+SDL_Texture *TM_LoadTexture(const char *asset, SDL_Renderer *renderer);
 
 #endif

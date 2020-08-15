@@ -4,10 +4,10 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
-extern bool is_running;
+bool is_running;
 
-extern SDL_Window *window;
-extern SDL_Renderer *renderer;
+SDL_Window *window;
+SDL_Renderer *renderer;
 
 bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
                bool fullscreen);

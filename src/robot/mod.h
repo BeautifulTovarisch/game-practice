@@ -1,3 +1,7 @@
 #include <SDL2/SDL_image.h>
 
-SDL_Texture *robot_texture;
+SDL_Rect Robot_Src, Robot_Dst;
+SDL_Texture *Robot_Texture;
+
+/* Assets */
+const char *ROBOT_SPRITE;

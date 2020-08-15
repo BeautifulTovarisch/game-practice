@@ -1,13 +1,18 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <unistd.h>
 
 #include "mod.h"
+
+#include "../robot/mod.h"
+#include "../texture_manager/mod.h"
 
 bool is_running = false;
 
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
+
+SDL_Rect Robot_Src, Robot_Dst;
+SDL_Texture *Robot_Texture = NULL;
 
 bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
                bool fullscreen) {
@@ -34,9 +39,16 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
+  Robot_Texture = TM_LoadTexture(ROBOT_SPRITE, renderer);
+
+  if (!Robot_Texture) {
+    printf("Failed to load Robot texture: %s\n", SDL_GetError());
+    return false;
+  }
+
   is_running = true;
 
-  printf("Initializaion success.\n");
+  printf("Initialization success.\n");
 
   return true;
 }
@@ -54,12 +66,14 @@ void Game_Events() {
   }
 };
 
-void Game_Update(){
-    //
+void Game_Update() {
+  Robot_Dst.h = 64;
+  Robot_Dst.w = 64;
 };
 
 void Game_Render() {
   SDL_RenderClear(renderer);
+  SDL_RenderCopy(renderer, Robot_Texture, NULL, &Robot_Dst);
   SDL_RenderPresent(renderer);
 };
 
