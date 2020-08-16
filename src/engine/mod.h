@@ -6,7 +6,7 @@
 
 bool is_running;
 
-SDL_Window *Game_Wnindow;
+SDL_Window *Game_Window;
 SDL_Renderer *Game_Renderer;
 
 bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
