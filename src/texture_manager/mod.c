@@ -9,12 +9,14 @@ SDL_Texture *TM_LoadTexture(const char *asset) {
   SDL_FreeSurface(surface);
 
   if (!texture) {
-    printf("Texture failed to load: %s", SDL_GetError());
+    printf("Texture failed to load: %s\n", SDL_GetError());
   }
 
   return texture;
 }
 
 void TM_Draw(SDL_Texture *texture, SDL_Rect src, SDL_Rect dst) {
-  SDL_RenderCopy(Game_Renderer, texture, &src, &dst);
+  if (SDL_RenderCopy(Game_Renderer, texture, &src, &dst) != 0) {
+    printf("Failed to draw texture: %s\n", SDL_GetError());
+  };
 }

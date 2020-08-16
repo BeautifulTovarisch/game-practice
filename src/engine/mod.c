@@ -3,14 +3,12 @@
 
 #include "mod.h"
 
-#include "../robot/mod.h"
+#include "../map/mod.h"
 
 bool is_running = false;
 
 SDL_Window *Game_Window = NULL;
 SDL_Renderer *Game_Renderer = NULL;
-
-Robot robot;
 
 bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
                  bool fullscreen) {
@@ -37,6 +35,8 @@ bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255);
 
+  Map_Load();
+
   is_running = true;
 
   printf("Initialization success.\n");
@@ -57,19 +57,13 @@ void Engine_Events() {
   }
 };
 
-void Engine_Update() {
-  robot.src.h = 64;
-  robot.src.w = 64;
-
-  robot.dst.h = 64;
-  robot.dst.w = 64;
+void Engine_Update(){
+    //
 };
 
 void Engine_Render() {
   SDL_RenderClear(Game_Renderer);
-
-  Robot_Draw(robot);
-
+  Map_Draw();
   SDL_RenderPresent(Game_Renderer);
 };
 
