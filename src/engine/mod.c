@@ -37,11 +37,27 @@ bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255);
 
+  ECS_Init();
+
+  Entity player = ECS_CreateEntity(&world);
+
+  // id 1 -> 0
+
+  ECS_CreateEntity(&world);
+
+  print_world(&world);
+
+  ECS_DestroyEntity(&world, player);
+
+  printf("\n");
+
+  ECS_CreateEntity(&world);
+
+  print_world(&world);
+
   is_running = true;
 
   printf("Initialization success.\n");
-
-  ECS_Init();
 
   return true;
 }

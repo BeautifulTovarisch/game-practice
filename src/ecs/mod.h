@@ -10,6 +10,7 @@
 
 Queue *entity_pool;
 static int entity_count;
+static int entity_map[MAX_ENTITIES];
 
 typedef unsigned int Entity;
 typedef unsigned int ComponentType;
