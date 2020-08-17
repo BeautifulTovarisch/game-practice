@@ -2,7 +2,8 @@
 #define ECS_H
 #include <stdio.h>
 
-#include "../components/mod.h"
+#include "components.h"
+
 #include "../util/queue/mod.h"
 
 #define MAX_ENTITIES 100

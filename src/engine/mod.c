@@ -43,10 +43,6 @@ bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   ECS_Init();
 
-  Entity player = ECS_CreateEntity(&world);
-
-  printf("%d\n", player);
-
   return true;
 }
 

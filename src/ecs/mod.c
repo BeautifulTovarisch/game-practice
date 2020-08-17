@@ -6,7 +6,7 @@ void ECS_Init() {
   static int entity_count = 0;
   entity_pool = Queue_Create(MAX_ENTITIES);
 
-  for (Entity entity = 0; entity < MAX_ENTITIES; entity++) {
+  for (Entity entity = 1; entity < MAX_ENTITIES + 1; entity++) {
     Queue_Enqueue(entity_pool, entity);
   }
 }
