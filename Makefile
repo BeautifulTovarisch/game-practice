@@ -11,12 +11,18 @@ all: main $(SUBDIRS)
 $(SUBDIRS):
 	$(MAKE) -C $@
 
-main: src/main.o $(SUBDIRS)
-	gcc src/main.o $(OBJ) $(CFLAGS) -o main
+main: src/main.o $(SUBDIRS) queue
+	gcc src/main.o $(OBJ) \
+	src/util/queue/mod.o \
+	$(CFLAGS) -o main
 
-.PHONY: clean $(SUBDIRS)
+queue:
+	$(MAKE) -C src/util/queue
+
+.PHONY: clean $(SUBDIRS) queue
 clean:
 	rm -f src/main src/main.o
+	rm -f src/util/queue/mod src/util/queue/mod.o
 
 # Recurse into each subdir and execute make clean
 	for dir in $(SUBDIRS); do \

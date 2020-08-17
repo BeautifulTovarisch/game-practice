@@ -3,12 +3,14 @@
 
 #include "mod.h"
 
-#include "../map/mod.h"
+#include "../ecs/mod.h"
 
 bool is_running = false;
 
 SDL_Window *Game_Window = NULL;
 SDL_Renderer *Game_Renderer = NULL;
+
+World world;
 
 bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
                  bool fullscreen) {
@@ -35,11 +37,15 @@ bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255);
 
-  Map_Load();
-
   is_running = true;
 
   printf("Initialization success.\n");
+
+  ECS_Init();
+
+  Entity player = ECS_CreateEntity(&world);
+
+  printf("%d\n", player);
 
   return true;
 }
@@ -63,11 +69,12 @@ void Engine_Update(){
 
 void Engine_Render() {
   SDL_RenderClear(Game_Renderer);
-  Map_Draw();
   SDL_RenderPresent(Game_Renderer);
 };
 
 void Engine_Clean() {
+  ECS_Cleanup();
+
   SDL_DestroyWindow(Game_Window);
   SDL_DestroyRenderer(Game_Renderer);
   SDL_Quit();
