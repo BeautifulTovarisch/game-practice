@@ -37,23 +37,16 @@ bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255);
 
-  ECS_Init();
+  World world = ECS_Init();
 
-  Entity player = ECS_CreateEntity(&world);
+  Component c = {.type = C_POSITION,
+                 .component.position = (Position){.x = 10, .y = 10}};
 
-  // id 1 -> 0
+  Entity player = ECS_CreateEntity();
 
-  ECS_CreateEntity(&world);
-
-  print_world(&world);
+  ECS_AddComponent(&world, player, c);
 
   ECS_DestroyEntity(&world, player);
-
-  printf("\n");
-
-  ECS_CreateEntity(&world);
-
-  print_world(&world);
 
   is_running = true;
 
