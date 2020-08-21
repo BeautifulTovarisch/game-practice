@@ -4,6 +4,9 @@
 #include "mod.h"
 
 #include "../ecs/mod.h"
+#include "../texture_manager/mod.h"
+
+#include "../horse/mod.h"
 
 bool is_running = false;
 
@@ -12,10 +15,8 @@ SDL_Renderer *Game_Renderer = NULL;
 
 World world;
 
-bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
-                 bool fullscreen) {
-
-  int full = fullscreen ? SDL_WINDOW_FULLSCREEN : 0;
+bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
+               int flags) {
 
   // Initialize SDL, returning success or failure
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -23,7 +24,7 @@ bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
     return false;
   }
 
-  Game_Window = SDL_CreateWindow(title, x_pos, y_pos, width, height, full);
+  Game_Window = SDL_CreateWindow(title, x_pos, y_pos, width, height, flags);
   if (!Game_Window) {
     printf("Window creation failed: %s\n", SDL_GetError());
     return false;
@@ -37,16 +38,16 @@ bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255);
 
-  World world = ECS_Init();
+  world = ECS_Init();
 
-  Component c = {.type = C_POSITION,
-                 .component.position = (Position){.x = 10, .y = 10}};
+  Entity horse = ECS_CreateEntity();
 
-  Entity player = ECS_CreateEntity();
+  Component c = {.type = C_SPRITE,
+                 .component.sprite = {.file = HORSE_SPRITE,
+                                      .src = (SDL_Rect){.w = 82, .h = 66},
+                                      .dest = (SDL_Rect){.w = 120, .h = 100}}};
 
-  ECS_AddComponent(&world, player, c);
-
-  ECS_DestroyEntity(&world, player);
+  ECS_AddComponent(&world, horse, c);
 
   is_running = true;
 
@@ -55,7 +56,7 @@ bool Engine_Init(const char *title, int x_pos, int y_pos, int width, int height,
   return true;
 }
 
-void Engine_Events() {
+void Game_Events() {
   SDL_Event event;
   SDL_PollEvent(&event);
 
@@ -68,16 +69,23 @@ void Engine_Events() {
   }
 };
 
-void Engine_Update(){
-    //
+void Game_Update() {
+  Sprite *s = &world.sprite_components[1];
+  s->src.x = 82 * (((SDL_GetTicks() / 100)) % 5);
 };
 
-void Engine_Render() {
+void Game_Render() {
   SDL_RenderClear(Game_Renderer);
-  SDL_RenderPresent(Game_Renderer);
-};
 
-void Engine_Clean() {
+  Sprite s = world.sprite_components[1];
+
+  SDL_Texture *tx = TM_LoadTexture(&s);
+  TM_Draw(tx, &s);
+
+  SDL_RenderPresent(Game_Renderer);
+}
+
+void Game_Clean() {
   ECS_Cleanup();
 
   SDL_DestroyWindow(Game_Window);
@@ -87,4 +95,4 @@ void Engine_Clean() {
   printf("Cleanup complete.\n");
 };
 
-bool Engine_IsRunning() { return is_running; }
+bool Game_IsRunning() { return is_running; }

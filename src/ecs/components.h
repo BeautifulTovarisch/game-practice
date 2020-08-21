@@ -1,14 +1,25 @@
-#ifndef POSITION_H
-#define POSITION_H
+#ifndef COMPONENT_H
+#define COMPONENT_H
 
-typedef struct Sprite {
-  char *file;
-} Sprite;
+#include <SDL2/SDL.h>
 
-typedef struct Position {
+typedef struct Vector {
+  float x;
+  float y;
+} Vector;
+
+typedef struct Transform {
   int x;
   int y;
-} Position;
+} Transform;
+
+typedef struct Sprite {
+  const char *file;
+
+  Transform *transform;
+  SDL_Rect src;
+  SDL_Rect dest;
+} Sprite;
 
 typedef struct Velocity {
   int x;
@@ -21,10 +32,10 @@ typedef struct Appearance {
 
 /* Component Mask */
 /* Components are combined and assigned to an entity */
-/* e.g. Player => C_POSITION|C_VELOCITY */
+/* e.g. Player => C_TRANSFORM|C_VELOCITY|C_APPEARANCE */
 typedef enum {
   C_NONE = 0,
-  C_POSITION = 1 << 0,
+  C_TRANSFORM = 1 << 0,
   C_VELOCITY = 1 << 1,
   C_APPEARANCE = 1 << 2,
   C_SPRITE = 1 << 3
@@ -34,7 +45,7 @@ typedef struct Component {
   ComponentType type;
   union component {
     Sprite sprite;
-    Position position;
+    Transform transform;
     Velocity velocity;
     Appearance appearance;
   } component;

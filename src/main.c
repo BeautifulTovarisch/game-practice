@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "engine/mod.h"
+#include "game/mod.h"
 
 int main() {
   const int FPS = 60;
@@ -10,18 +10,19 @@ int main() {
   int frame_time;
 
   // Initialize graphics
-  if (!Engine_Init("Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                   800, 600, false)) {
-    printf("Engine failed to initialize: %s\n", SDL_GetError());
+  if (!Game_Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640,
+                 480, 0)) {
+    printf("Game failed to initialize: %s\n", SDL_GetError());
+    return 1;
   }
 
-  while (Engine_IsRunning()) {
+  while (Game_IsRunning()) {
 
     frame_start = SDL_GetTicks();
 
-    Engine_Events();
-    Engine_Update();
-    Engine_Render();
+    Game_Events();
+    Game_Update();
+    Game_Render();
 
     frame_time = SDL_GetTicks() - frame_start;
 
@@ -30,5 +31,5 @@ int main() {
     }
   }
 
-  Engine_Clean();
+  Game_Clean();
 }

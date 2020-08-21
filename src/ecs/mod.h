@@ -19,7 +19,7 @@ typedef unsigned int Entity;
 typedef struct World {
   int component_mask[MAX_ENTITIES];
   Sprite sprite_components[MAX_ENTITIES];
-  Position position_components[MAX_ENTITIES];
+  Transform transform_components[MAX_ENTITIES];
   Velocity velocity_components[MAX_ENTITIES];
   Appearance appearance_components[MAX_ENTITIES];
 } World;

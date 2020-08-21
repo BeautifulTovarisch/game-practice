@@ -3,8 +3,10 @@
 
 #include <SDL2/SDL_image.h>
 
-SDL_Texture *TM_LoadTexture(const char *asset);
+#include "../ecs/components.h"
 
-void TM_Draw(SDL_Texture *texture, SDL_Rect src, SDL_Rect dst);
+SDL_Texture *TM_LoadTexture(Sprite *sprite);
+
+void TM_Draw(SDL_Texture *texture, Sprite *sprite);
 
 #endif

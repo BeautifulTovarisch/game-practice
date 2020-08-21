@@ -3,8 +3,8 @@
 Queue *entity_pool;
 
 static void clear_components(World *world, Entity entity) {
-  if (world->component_mask[entity] & C_POSITION) {
-    world->position_components[entity] = (Position){};
+  if (world->component_mask[entity] & C_TRANSFORM) {
+    world->transform_components[entity] = (Transform){};
   }
   if (world->component_mask[entity] & C_VELOCITY) {
     world->velocity_components[entity] = (Velocity){};
@@ -49,8 +49,11 @@ Entity ECS_CreateEntity() {
 
 void ECS_AddComponent(World *world, Entity entity, Component cmp) {
   switch (cmp.type) {
-  case C_POSITION:
-    world->position_components[entity] = cmp.component.position;
+  case C_SPRITE:
+    world->sprite_components[entity] = cmp.component.sprite;
+    break;
+  case C_TRANSFORM:
+    world->transform_components[entity] = cmp.component.transform;
     break;
   case C_VELOCITY:
     world->velocity_components[entity] = cmp.component.velocity;
@@ -63,7 +66,9 @@ void ECS_AddComponent(World *world, Entity entity, Component cmp) {
   }
 
   // Combine component types of entities
-  world->component_mask[entity] |= cmp.type;
+  world->component_mask[entity] =
+      world->component_mask[entity] ? world->component_mask[entity] |= cmp.type
+                                    : cmp.type;
 }
 
 /* TODO :: 'Shift' components to fill in gaps in component arrays */
