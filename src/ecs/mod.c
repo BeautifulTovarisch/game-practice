@@ -5,9 +5,9 @@ Queue *entity_pool;
 static void clear_components(World *world, Entity entity) {
   int position = entity_map[entity];
 
-  if (world->component_mask[position] & C_TRANSFORM) {
-    world->transform_components[position] =
-        world->transform_components[entity_count];
+  if (world->component_mask[position] & C_POSITION) {
+    world->position_components[position] =
+        world->position_components[entity_count];
   }
   if (world->component_mask[position] & C_VELOCITY) {
     world->velocity_components[position] =
@@ -61,11 +61,11 @@ void ECS_AddComponent(World *world, Entity entity, Component cmp) {
   case C_SPRITE:
     world->sprite_components[position] = cmp.component.sprite;
     break;
-  case C_TRANSFORM:
-    world->transform_components[position] = cmp.component.transform;
+  case C_POSITION:
+    world->position_components[position] = cmp.component.vector;
     break;
   case C_VELOCITY:
-    world->velocity_components[position] = cmp.component.velocity;
+    world->velocity_components[position] = cmp.component.vector;
     break;
   case C_APPEARANCE:
     world->appearance_components[position] = cmp.component.appearance;

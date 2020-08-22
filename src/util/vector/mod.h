@@ -8,8 +8,13 @@ typedef struct Vector {
   float y;
 } Vector;
 
-Vector Vector_Add(Vector v1, Vector v2) {
-  return (Vector){.x = v1.x + v2.x, .y = v1.y + v2.y};
-}
+Vector Vector_Add(Vector *v1, Vector *v2);
+Vector Vector_Divide(Vector *v, float scalar);
+Vector Vector_Multiply(Vector *v, float scalar);
+Vector Vector_Subtract(Vector *v1, Vector *v2);
+
+float Vector_Magnitude(Vector *v);
+
+void Vector_Normalize(Vector *v);
 
 #endif

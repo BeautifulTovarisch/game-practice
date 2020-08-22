@@ -7,6 +7,7 @@
 #include "components.h"
 
 #include "../util/queue/mod.h"
+#include "../util/vector/mod.h"
 
 #define MAX_ENTITIES 100
 
@@ -20,8 +21,8 @@ typedef unsigned int Entity;
 typedef struct World {
   int component_mask[MAX_ENTITIES];
   Sprite sprite_components[MAX_ENTITIES];
-  Velocity velocity_components[MAX_ENTITIES];
-  Transform transform_components[MAX_ENTITIES];
+  Vector velocity_components[MAX_ENTITIES];
+  Vector position_components[MAX_ENTITIES];
   Appearance appearance_components[MAX_ENTITIES];
 } World;
 
