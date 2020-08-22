@@ -12,13 +12,13 @@ SDL_Renderer *Game_Renderer;
 bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
                int flags);
 
-void Game_Events();
-
-void Game_Update();
-void Game_Render();
-
-void Game_Clean();
+SDL_Renderer *Game_GetRenderer();
 
 bool Game_IsRunning();
+
+void Game_Events();
+void Game_Update();
+void Game_Render();
+void Game_Clean();
 
 #endif

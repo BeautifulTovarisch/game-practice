@@ -14,11 +14,12 @@ typedef struct Transform {
 } Transform;
 
 typedef struct Sprite {
+  int flipped;
   const char *file;
 
-  Transform *transform;
   SDL_Rect src;
   SDL_Rect dest;
+  SDL_Texture *texture;
 } Sprite;
 
 typedef struct Velocity {

@@ -3,17 +3,22 @@
 Queue *entity_pool;
 
 static void clear_components(World *world, Entity entity) {
-  if (world->component_mask[entity] & C_TRANSFORM) {
-    world->transform_components[entity] = (Transform){};
+  int position = entity_map[entity];
+
+  if (world->component_mask[position] & C_TRANSFORM) {
+    world->transform_components[position] =
+        world->transform_components[entity_count];
   }
-  if (world->component_mask[entity] & C_VELOCITY) {
-    world->velocity_components[entity] = (Velocity){};
+  if (world->component_mask[position] & C_VELOCITY) {
+    world->velocity_components[position] =
+        world->velocity_components[entity_count];
   }
-  if (world->component_mask[entity] & C_APPEARANCE) {
-    world->appearance_components[entity] = (Appearance){};
+  if (world->component_mask[position] & C_APPEARANCE) {
+    world->appearance_components[position] =
+        world->appearance_components[entity_count];
   }
-  if (world->component_mask[entity] & C_SPRITE) {
-    world->sprite_components[entity] = (Sprite){};
+  if (world->component_mask[position] & C_SPRITE) {
+    world->sprite_components[position] = world->sprite_components[entity_count];
   }
 }
 
@@ -29,7 +34,7 @@ World ECS_Init() {
   }
 
   // TODO :: Initialize world with state
-  World world;
+  World world = (World){};
 
   memset(world.component_mask, C_NONE, MAX_ENTITIES);
 
@@ -42,46 +47,53 @@ Entity ECS_CreateEntity() {
     return 0;
   }
 
+  Entity id = Queue_Dequeue(entity_pool);
   entity_count++;
+  entity_map[id] = entity_count;
 
-  return Queue_Dequeue(entity_pool);
+  return id;
 }
 
 void ECS_AddComponent(World *world, Entity entity, Component cmp) {
+  int position = entity_map[entity];
+
   switch (cmp.type) {
   case C_SPRITE:
-    world->sprite_components[entity] = cmp.component.sprite;
+    world->sprite_components[position] = cmp.component.sprite;
     break;
   case C_TRANSFORM:
-    world->transform_components[entity] = cmp.component.transform;
+    world->transform_components[position] = cmp.component.transform;
     break;
   case C_VELOCITY:
-    world->velocity_components[entity] = cmp.component.velocity;
+    world->velocity_components[position] = cmp.component.velocity;
     break;
   case C_APPEARANCE:
-    world->appearance_components[entity] = cmp.component.appearance;
+    world->appearance_components[position] = cmp.component.appearance;
     break;
   default:
     printf("Invalid component type: %d\n", cmp.type);
   }
 
   // Combine component types of entities
-  world->component_mask[entity] =
-      world->component_mask[entity] ? world->component_mask[entity] |= cmp.type
-                                    : cmp.type;
+  world->component_mask[position] |= cmp.type;
 }
 
 /* TODO :: 'Shift' components to fill in gaps in component arrays */
 /* after entity is deleted */
 void ECS_DestroyEntity(World *world, Entity entity) {
+  int position = entity_map[entity];
+
   // Queue 'freed' entity
   Queue_Enqueue(entity_pool, entity);
 
   clear_components(world, entity);
+  world->component_mask[position] = C_NONE;
 
-  world->component_mask[entity] = C_NONE;
-
+  entity_map[entity] = 0;
   entity_count--;
 }
+
+int *ECS_GetEntities() { return entity_map; }
+int ECS_GetEntityCount() { return entity_count; }
 
 void ECS_Cleanup() { free(entity_pool); }

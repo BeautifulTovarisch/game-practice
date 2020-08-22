@@ -3,17 +3,17 @@
 
 #include "mod.h"
 
+#include "../draw-system/mod.h"
 #include "../ecs/mod.h"
-#include "../texture_manager/mod.h"
 
 #include "../horse/mod.h"
 
 bool is_running = false;
 
+World world;
+
 SDL_Window *Game_Window = NULL;
 SDL_Renderer *Game_Renderer = NULL;
-
-World world;
 
 bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
                int flags) {
@@ -44,6 +44,7 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   Component c = {.type = C_SPRITE,
                  .component.sprite = {.file = HORSE_SPRITE,
+                                      .texture = DS_LoadTexture(HORSE_SPRITE),
                                       .src = (SDL_Rect){.w = 82, .h = 66},
                                       .dest = (SDL_Rect){.w = 120, .h = 100}}};
 
@@ -69,18 +70,15 @@ void Game_Events() {
   }
 };
 
-void Game_Update() {
-  Sprite *s = &world.sprite_components[1];
-  s->src.x = 82 * (((SDL_GetTicks() / 100)) % 5);
+void Game_Update(){
+    /* Sprite *s = world.sprite_components[1]; */
+    /* s->src.x = 82 * (((SDL_GetTicks() / 100)) % 5); */
 };
 
 void Game_Render() {
   SDL_RenderClear(Game_Renderer);
 
-  Sprite s = world.sprite_components[1];
-
-  SDL_Texture *tx = TM_LoadTexture(&s);
-  TM_Draw(tx, &s);
+  DS_Draw(&world);
 
   SDL_RenderPresent(Game_Renderer);
 }
@@ -96,3 +94,5 @@ void Game_Clean() {
 };
 
 bool Game_IsRunning() { return is_running; }
+
+SDL_Renderer *Game_GetRenderer() { return Game_Renderer; };
