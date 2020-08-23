@@ -2,7 +2,11 @@
 
 static State state;
 
-void State_Init() { state = (State){.game = MENU_CLOSED, .menu = 0}; };
+void State_Init() {
+  state = (State){.game = GAME_DEFAULT,
+                  .menu = MENU_CLOSED,
+                  .mouse = (MouseState){.buttons = 0, .position = (Vector){}}};
+};
 
 static void update_menu(Action action) {
   switch (action) {
@@ -48,3 +52,21 @@ void State_Update(Action action) {
     return;
   }
 }
+
+void State_UpdateMouseButton(Action action, int button) {
+  // Update current buttons pressed as bitmask
+  switch (action) {
+  case MOUSE_CLICK:
+    state.mouse.buttons |= button;
+    break;
+  case MOUSE_RELEASE:
+    state.mouse.buttons &= ~button;
+    break;
+  default:
+    return;
+  }
+};
+
+void State_UpdateMousePosition(Vector vector) { state.mouse.position = vector; }
+
+State *State_Get() { return &state; }

@@ -7,6 +7,7 @@
 #include "../ecs/mod.h"
 
 #include "../physics-system/mod.h"
+#include "../state-system/mod.h"
 
 int Input_HandleEvents(SDL_Event event, World *world, Entity player);
 
