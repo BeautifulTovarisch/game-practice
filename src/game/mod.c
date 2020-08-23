@@ -3,14 +3,11 @@
 
 #include "mod.h"
 
-#include "../draw-system/mod.h"
-#include "../ecs/mod.h"
-
-#include "../horse/mod.h"
-
 bool is_running = false;
 
 World world;
+
+Entity player;
 
 SDL_Window *Game_Window = NULL;
 SDL_Renderer *Game_Renderer = NULL;
@@ -40,15 +37,11 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   world = ECS_Init();
 
-  Entity horse = ECS_CreateEntity();
+  player = ECS_CreateEntity();
 
-  Component c = {.type = C_SPRITE,
-                 .component.sprite = {.file = HORSE_SPRITE,
-                                      .texture = DS_LoadTexture(HORSE_SPRITE),
-                                      .src = (SDL_Rect){.w = 82, .h = 66},
-                                      .dest = (SDL_Rect){.w = 120, .h = 100}}};
-
-  ECS_AddComponent(&world, horse, c);
+  ECS_AddComponent(&world, player,
+                   (Component){.type = C_POSITION,
+                               .component.vector = (Vector){.x = 0, .y = 0}});
 
   is_running = true;
 
@@ -59,15 +52,13 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
 void Game_Events() {
   SDL_Event event;
-  SDL_PollEvent(&event);
 
-  switch (event.type) {
-  case SDL_QUIT:
-    is_running = false;
-    break;
-  default:
-    break;
-  }
+  while (SDL_PollEvent(&event)) {
+    if (!Input_HandleEvents(event, &world, player)) {
+      is_running = false;
+      break;
+    };
+  };
 };
 
 void Game_Update(){
@@ -78,7 +69,7 @@ void Game_Update(){
 void Game_Render() {
   SDL_RenderClear(Game_Renderer);
 
-  DS_Draw(&world);
+  DS_Draw(&world, Game_Renderer);
 
   SDL_RenderPresent(Game_Renderer);
 }
@@ -94,5 +85,3 @@ void Game_Clean() {
 };
 
 bool Game_IsRunning() { return is_running; }
-
-SDL_Renderer *Game_GetRenderer() { return Game_Renderer; };

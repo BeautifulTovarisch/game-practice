@@ -12,9 +12,6 @@ typedef struct Queue {
   int *items;
 } Queue;
 
-static int is_full(Queue *queue);
-static int is_empty(Queue *queue);
-
 Queue *Queue_Create(unsigned capacity);
 
 void Queue_Enqueue(Queue *queue, int data);

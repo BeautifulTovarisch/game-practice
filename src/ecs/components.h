@@ -25,8 +25,9 @@ typedef enum {
   C_NONE = 0,
   C_POSITION = 1 << 0,
   C_VELOCITY = 1 << 1,
-  C_APPEARANCE = 1 << 2,
-  C_SPRITE = 1 << 3
+  C_ACCELERATION = 1 << 2,
+  C_APPEARANCE = 1 << 3,
+  C_SPRITE = 1 << 4
 } ComponentType;
 
 typedef struct Component {

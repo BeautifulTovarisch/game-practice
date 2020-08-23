@@ -6,10 +6,8 @@
 #include "../ecs/components.h"
 #include "../ecs/mod.h"
 
-static void draw(Sprite *sprite);
+SDL_Texture *DS_LoadTexture(const char *file, SDL_Renderer *renderer);
 
-SDL_Texture *DS_LoadTexture(const char *file);
-
-void DS_Draw(World *world);
+void DS_Draw(World *world, SDL_Renderer *renderer);
 
 #endif

@@ -13,9 +13,6 @@
 
 Queue *entity_pool;
 
-static int entity_count;
-static int entity_map[MAX_ENTITIES];
-
 typedef unsigned int Entity;
 
 typedef struct World {
@@ -23,10 +20,9 @@ typedef struct World {
   Sprite sprite_components[MAX_ENTITIES];
   Vector velocity_components[MAX_ENTITIES];
   Vector position_components[MAX_ENTITIES];
+  Vector acceleration_components[MAX_ENTITIES];
   Appearance appearance_components[MAX_ENTITIES];
 } World;
-
-static void clear_components(World *world, Entity entity);
 
 World ECS_Init();
 
@@ -34,9 +30,11 @@ Entity ECS_CreateEntity();
 
 // Return current entity_count
 int ECS_GetEntityCount();
+int ECS_GetEntityPosition(Entity entity);
 
 void ECS_Cleanup();
 void ECS_DestroyEntity(World *world, Entity entity);
 void ECS_AddComponent(World *world, Entity entity, Component cmp);
+void ECS_RemoveComponent(World *world, Entity entity, Component cmp);
 
 #endif
