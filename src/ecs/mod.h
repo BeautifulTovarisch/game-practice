@@ -21,6 +21,7 @@ typedef struct World {
   Vector velocity_components[MAX_ENTITIES];
   Vector position_components[MAX_ENTITIES];
   Vector acceleration_components[MAX_ENTITIES];
+  Collision collision_components[MAX_ENTITIES];
   Appearance appearance_components[MAX_ENTITIES];
 } World;
 

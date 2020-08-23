@@ -26,6 +26,10 @@ static void clear_components(World *world, Entity entity) {
     world->appearance_components[position] =
         world->appearance_components[entity_count];
   }
+  if (mask & C_COLLISION) {
+    world->collision_components[position] =
+        world->collision_components[entity_count];
+  }
   if (mask & C_SPRITE) {
     world->sprite_components[position] = world->sprite_components[entity_count];
   }
@@ -89,6 +93,8 @@ void ECS_AddComponent(World *world, Entity entity, Component cmp) {
   case C_VELOCITY:
     world->velocity_components[position] = cmp.component.vector;
     break;
+  case C_COLLISION:
+    world->collision_components[position] = cmp.component.collision;
   case C_APPEARANCE:
     world->appearance_components[position] = cmp.component.appearance;
     break;

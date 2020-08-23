@@ -5,6 +5,13 @@
 
 #include "../util/vector/mod.h"
 
+// represents collision box
+typedef struct Collision {
+  Vector origin;
+  float width;
+  float height;
+} Collision;
+
 typedef struct Sprite {
   int flipped;
   const char *file;
@@ -27,7 +34,8 @@ typedef enum {
   C_VELOCITY = 1 << 1,
   C_ACCELERATION = 1 << 2,
   C_APPEARANCE = 1 << 3,
-  C_SPRITE = 1 << 4
+  C_SPRITE = 1 << 4,
+  C_COLLISION = 1 << 5
 } ComponentType;
 
 typedef struct Component {
@@ -35,6 +43,7 @@ typedef struct Component {
   union component {
     Sprite sprite;
     Vector vector;
+    Collision collision;
     Appearance appearance;
   } component;
 } Component;
