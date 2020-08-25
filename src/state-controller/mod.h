@@ -1,5 +1,5 @@
-#ifndef STATE_SYSTEM_H
-#define STATE_SYSTEM_H
+#ifndef STATE_CONTROLLER_H
+#define STATE_CONTROLLER_H
 
 #include "../util/vector/mod.h"
 

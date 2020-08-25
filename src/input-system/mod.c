@@ -36,11 +36,11 @@ int Input_HandleEvents(SDL_Event event, World *world, Entity player) {
         (Vector){.x = event.motion.x, .y = event.motion.y});
     break;
   case SDL_MOUSEBUTTONUP:
-    State_UpdateMouseButton(MOUSE_CLICK, event.button.button);
+    State_UpdateMouseButton(MOUSE_RELEASE, event.button.button);
     break;
   case SDL_MOUSEBUTTONDOWN:
     // Update mouse statep
-    State_UpdateMouseButton(MOUSE_RELEASE, event.button.button);
+    State_UpdateMouseButton(MOUSE_CLICK, event.button.button);
     break;
   default:
     break;

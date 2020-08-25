@@ -12,6 +12,8 @@ Entity player;
 SDL_Window *Game_Window = NULL;
 SDL_Renderer *Game_Renderer = NULL;
 
+World *Game_GetWorld() { return &world; }
+
 bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
                int flags) {
 
@@ -37,11 +39,27 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   world = ECS_Init();
 
-  player = ECS_CreateEntity();
+  Entity play_button = ECS_CreateEntity();
+  Entity exit_button = ECS_CreateEntity();
 
-  ECS_AddComponent(&world, player,
-                   (Component){.type = C_POSITION,
-                               .component.vector = (Vector){.x = 0, .y = 0}});
+  Menu_AddButton(play_button);
+  Menu_AddButton(exit_button);
+
+  ECS_AddComponent(
+      &world, play_button,
+      (Component){.type = C_SPRITE,
+                  .component.sprite = {
+                      .texture = DS_LoadTexture("assets/play_button.png",
+                                                Game_Renderer),
+                      .src = {.w = 64, .h = 64},
+                      .dest = {.x = 100, .y = 100, .w = 64, .h = 48}}});
+
+  ECS_AddComponent(&world, play_button,
+                   (Component){.type = C_COLLISION,
+                               .component.collision = {
+                                   .origin = (Vector){.x = 100, .y = 100},
+                                   .height = 64,
+                                   .width = 64}});
 
   is_running = true;
 
@@ -61,9 +79,9 @@ void Game_Events() {
   };
 };
 
-void Game_Update(){
-    /* Sprite *s = world.sprite_components[1]; */
-    /* s->src.x = 82 * (((SDL_GetTicks() / 100)) % 5); */
+void Game_Update() {
+  //
+  Menu_DetectSelection(&world);
 };
 
 void Game_Render() {

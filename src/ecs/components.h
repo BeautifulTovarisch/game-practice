@@ -14,7 +14,6 @@ typedef struct Collision {
 
 typedef struct Sprite {
   int flipped;
-  const char *file;
 
   SDL_Rect src;
   SDL_Rect dest;
