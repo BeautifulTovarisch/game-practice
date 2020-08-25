@@ -39,27 +39,7 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   world = ECS_Init();
 
-  Entity play_button = ECS_CreateEntity();
-  Entity exit_button = ECS_CreateEntity();
-
-  Menu_AddButton(play_button);
-  Menu_AddButton(exit_button);
-
-  ECS_AddComponent(
-      &world, play_button,
-      (Component){.type = C_SPRITE,
-                  .component.sprite = {
-                      .texture = DS_LoadTexture("assets/play_button.png",
-                                                Game_Renderer),
-                      .src = {.w = 64, .h = 64},
-                      .dest = {.x = 100, .y = 100, .w = 64, .h = 48}}});
-
-  ECS_AddComponent(&world, play_button,
-                   (Component){.type = C_COLLISION,
-                               .component.collision = {
-                                   .origin = (Vector){.x = 100, .y = 100},
-                                   .height = 64,
-                                   .width = 64}});
+  Menu_Init(&world, Game_Renderer);
 
   is_running = true;
 

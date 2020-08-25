@@ -1,13 +1,15 @@
 #include "mod.h"
 
-// Store positions of button entities
-static int num_buttons = 0;
+// Keep track of which button is which entity
+static char *sprites[5] = {"assets/play_button.png", "assets/play_button.png",
+                           "assets/play_button.png", "assets/play_button.png",
+                           "assets/play_button.png"};
 static Entity buttons[5];
 
 /* Buttons are identified by their static position in the above:
-Button 0 - Play
-Button 1 - Exit
- */
+   Button 0 - Play
+   Button 1 - Exit
+*/
 
 // Set state depending on button pressed
 static void handle_click(int button) {
@@ -27,9 +29,33 @@ static void handle_click(int button) {
   }
 }
 
-void Menu_AddButton(Entity button) {
-  buttons[num_buttons] = button;
-  num_buttons++;
+void Menu_Init(World *world, SDL_Renderer *renderer) {
+
+  // Initialize buttons
+  for (int i = 0; i < 5; i++) {
+    Entity button = ECS_CreateEntity();
+
+    buttons[i] = button;
+
+    // Add Sprites and collision for buttons
+    ECS_AddComponent(
+        world, button,
+        (Component){
+            .type = C_SPRITE,
+            .component.sprite = {
+                .texture = DS_LoadTexture(sprites[i], renderer),
+                .src = {.w = 64, .h = 64},
+                .dest = {.x = 75, .y = 75 * (i + 1), .w = 64, .h = 48}}});
+
+    ECS_AddComponent(
+        world, button,
+        (Component){.type = C_COLLISION,
+                    .component.collision = {
+                        .origin = (Vector){.x = 75, .y = 75 * (i + 1)},
+
+                        .width = 64,
+                        .height = 48}});
+  }
 }
 
 void Menu_DetectSelection(World *world) {
