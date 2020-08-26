@@ -36,6 +36,6 @@ int ECS_GetEntityPosition(Entity entity);
 void ECS_Cleanup();
 void ECS_DestroyEntity(World *world, Entity entity);
 void ECS_AddComponent(World *world, Entity entity, Component cmp);
-void ECS_RemoveComponent(World *world, Entity entity, Component cmp);
+void ECS_RemoveComponent(World *world, Entity entity, ComponentType type);
 
 #endif

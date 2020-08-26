@@ -10,6 +10,7 @@ void State_Init() {
 
 static void update_menu(Action action) {
   switch (action) {
+    // TODO :: Consider unified 'toggle' menu action
   case MENU_OPEN:
     state.menu = MENU_OPENED;
     break;

@@ -4,6 +4,10 @@ Vector Vector_Add(Vector *v1, Vector *v2) {
   return (Vector){.x = v1->x + v2->x, .y = v1->y + v2->y};
 }
 
+Vector Vector_Subtract(Vector *v1, Vector *v2) {
+  return (Vector){.x = v1->x - v2->x, .y = v1->y - v2->y};
+}
+
 Vector Vector_Divide(Vector *v, float scalar) {
   float divisor = scalar > 0 ? scalar : 1.0;
   return (Vector){.x = v->x / divisor, .y = v->y / divisor};

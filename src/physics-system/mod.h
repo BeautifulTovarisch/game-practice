@@ -11,6 +11,8 @@
 int Physics_EntityCollision(World *world, Entity e_a, Entity e_b);
 int Physics_VectorCollision(World *world, Entity entity, Vector v);
 
+void Physics_ReduceVelocity(World *world, Entity entity, float scl);
+void Physics_ChangeDirection(World *world, Entity entity, Vector v);
 void Physics_ChangeVelocity(World *world, Entity entity, Vector v);
 
 #endif

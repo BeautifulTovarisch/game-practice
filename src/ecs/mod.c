@@ -106,11 +106,12 @@ void ECS_AddComponent(World *world, Entity entity, Component cmp) {
   world->component_mask[position] |= cmp.type;
 }
 
-void ECS_RemoveComponent(World *world, Entity entity, Component cmp) {
+// We only need type since an entity can only have one component of a given type
+void ECS_RemoveComponent(World *world, Entity entity, ComponentType type) {
   int position = entity_map[entity];
   int mask = world->component_mask[position];
 
-  switch (cmp.type) {
+  switch (type) {
   case C_SPRITE:
     world->sprite_components[position] = world->sprite_components[entity_count];
     break;
@@ -134,7 +135,7 @@ void ECS_RemoveComponent(World *world, Entity entity, Component cmp) {
     NULL;
   }
 
-  world->component_mask[position] &= ~cmp.type;
+  world->component_mask[position] &= ~type;
 }
 
 int ECS_GetEntityCount() { return entity_count; }

@@ -44,12 +44,30 @@ int Physics_VectorCollision(World *world, Entity entity, Vector v) {
          v.y <= (col.origin.y + col.height);
 }
 
+// Add vector to velocity to increase/decrease
 void Physics_ChangeVelocity(World *world, Entity entity, Vector v) {
-  // Add vector to velocity to increase/decrease
   // Do nothing if entity hasn't registered a velocity component
   int position = ECS_GetEntityPosition(entity);
   if (world->component_mask[position] & C_VELOCITY) {
     world->velocity_components[position] =
         Vector_Add(&world->velocity_components[position], &v);
+  }
+}
+
+// Divide velocity by scalar
+void Physics_ReduceVelocity(World *world, Entity entity, float scl) {
+  int position = ECS_GetEntityPosition(entity);
+  if (world->component_mask[position] & C_VELOCITY) {
+    world->velocity_components[position] =
+        Vector_Divide(&world->velocity_components[position], scl);
+  }
+}
+
+// Change direction of entity toward vector
+void Physics_ChangeDirection(World *world, Entity entity, Vector v) {
+  int position = ECS_GetEntityPosition(entity);
+  if (world->component_mask[position] & C_VELOCITY) {
+    world->velocity_components[position] =
+        Vector_Subtract(&v, &world->velocity_components[position]);
   }
 }
