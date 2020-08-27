@@ -18,7 +18,7 @@ main: src/main.o $(SUBDIRS)
 
 test: $(SUBDIRS)
 	gcc $(TEST) $(OBJ) $(CFLAGS) -l cmocka -o test
-	CMOCKA_MESSAGE_OUTPUT=tap ./test
+	./test
 	rm -f test
 
 .PHONY: test clean $(SUBDIRS)
