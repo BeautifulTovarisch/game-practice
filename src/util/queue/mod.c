@@ -39,3 +39,8 @@ int Queue_Dequeue(Queue *queue) {
 
   return data;
 }
+
+void Queue_Destroy(Queue **queue) {
+  free(*queue);
+  *queue = NULL;
+}
