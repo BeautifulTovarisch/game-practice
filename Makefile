@@ -3,11 +3,12 @@
 SRC := $(wildcard src/**/mod.c src/util/**/mod.c)
 OBJ := $(SRC:.c=.o)
 
-TEST := $(wildcard src/*/test.c src/util/**/test.c)
+TESTDIR := $(shell find src -name test.c -exec dirname {} \;)
 
 SUBDIRS := $(wildcard src/*/. src/util/*/.)
 
-CFLAGS := `sdl2-config --libs --cflags` -ggdb3 -O0 --std=c99 -Wall -lSDL2_image -lm
+# Make flags available to subdirs
+export CFLAGS := `sdl2-config --libs --cflags` -ggdb3 -O0 --std=c99 -Wall -lSDL2_image -lm
 
 all: main $(SUBDIRS)
 $(SUBDIRS):
@@ -16,12 +17,12 @@ $(SUBDIRS):
 main: src/main.o $(SUBDIRS)
 	gcc src/main.o $(OBJ) $(CFLAGS) -o main
 
-test: $(SUBDIRS)
-	gcc $(TEST) $(OBJ) $(CFLAGS) -l cmocka -o test
-	./test
-	rm -f test
+test: $(TESTDIR)
+$(TESTDIR):
+	echo $@
+	$(MAKE) test -C $@
 
-.PHONY: test clean $(SUBDIRS)
+.PHONY: test clean $(SUBDIRS) $(TESTDIR)
 clean:
 	rm -f src/main src/main.o
 

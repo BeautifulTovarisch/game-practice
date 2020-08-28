@@ -141,4 +141,4 @@ void ECS_RemoveComponent(World *world, Entity entity, ComponentType type) {
 int ECS_GetEntityCount() { return entity_count; }
 int ECS_GetEntityPosition(Entity entity) { return entity_map[entity]; }
 
-void ECS_Cleanup() { free(entity_pool); }
+void ECS_Cleanup() { Queue_Destroy(entity_pool); }
