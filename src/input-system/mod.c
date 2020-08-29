@@ -11,18 +11,18 @@ static void handle_keyboard(World *world, Entity player) {
 
   const Uint8 *key_state = SDL_GetKeyboardState(0);
 
-  if (key_down(key_state, SDL_SCANCODE_LEFT)) {
-    Physics_Accelerate(world, player, (Vector){.x = -1, .y = 0});
-  }
-  if (key_down(key_state, SDL_SCANCODE_RIGHT)) {
-    Physics_Accelerate(world, player, (Vector){.x = 1, .y = 0});
-  }
-  if (key_down(key_state, SDL_SCANCODE_UP)) {
-    Physics_Accelerate(world, player, (Vector){.x = 0, .y = -1});
-  }
-  if (key_down(key_state, SDL_SCANCODE_DOWN)) {
-    Physics_Accelerate(world, player, (Vector){.x = 0, .y = 1});
-  }
+  /* if (key_down(key_state, SDL_SCANCODE_LEFT)) { */
+  /*   Physics_Accelerate(world, player, (Vector){.x = -1, .y = 0}); */
+  /* } */
+  /* if (key_down(key_state, SDL_SCANCODE_RIGHT)) { */
+  /*   Physics_Accelerate(world, player, (Vector){.x = 1, .y = 0}); */
+  /* } */
+  /* if (key_down(key_state, SDL_SCANCODE_UP)) { */
+  /*   Physics_Accelerate(world, player, (Vector){.x = 0, .y = -1}); */
+  /* } */
+  /* if (key_down(key_state, SDL_SCANCODE_DOWN)) { */
+  /*   Physics_Accelerate(world, player, (Vector){.x = 0, .y = 1}); */
+  /* } */
 }
 
 // Pass the player entity to the physics system
@@ -34,6 +34,12 @@ int Input_HandleEvents(SDL_Event event, World *world, Entity player) {
   case SDL_MOUSEMOTION:
     State_UpdateMousePosition(
         (Vector){.x = event.motion.x, .y = event.motion.y});
+
+    Physics_ChangeDirection(
+        world, player,
+        Vector_Divide(&(Vector){.x = event.motion.x, .y = event.motion.y},
+                      100));
+
     break;
   case SDL_MOUSEBUTTONUP:
     State_UpdateMouseButton(MOUSE_RELEASE, event.button.button);

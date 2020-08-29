@@ -22,6 +22,8 @@ static Entity buttons[NUM_BUTTONS];
 static void handle_click(int button) {
   switch (button) {
   case PLAY:
+    State_Update(MENU_CLOSE);
+    State_Update(GAME_UNPAUSE);
     break;
   case PAUSE:
     break;
@@ -38,6 +40,7 @@ static void handle_click(int button) {
 
 /* Add Sprites and collision for buttons
  * Reusable method for hiding/showing menu at various points
+ * TODO :: Consider removing entities and creating new each time
  */
 void Menu_Show(World *world, SDL_Renderer *renderer) {
   for (int i = 0; i < NUM_BUTTONS; i++) {
@@ -72,6 +75,7 @@ void Menu_Show(World *world, SDL_Renderer *renderer) {
 void Menu_Hide(World *world) {
   for (int i = 0; i < NUM_BUTTONS; i++) {
     ECS_RemoveComponent(world, buttons[i], C_SPRITE);
+    ECS_RemoveComponent(world, buttons[i], C_POSITION);
     ECS_RemoveComponent(world, buttons[i], C_COLLISION);
   }
 }

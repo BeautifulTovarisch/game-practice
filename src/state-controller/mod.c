@@ -4,7 +4,7 @@ static State state;
 
 void State_Init() {
   state = (State){.game = GAME_DEFAULT,
-                  .menu = MENU_CLOSED,
+                  .menu = MENU_OPENED,
                   .mouse = (MouseState){.buttons = 0, .position = (Vector){}}};
 };
 

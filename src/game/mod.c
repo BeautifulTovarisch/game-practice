@@ -65,6 +65,7 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
                                .width = 82,
                                .height = 66}});
 
+  State_Init();
   Menu_Init(&world, Game_Renderer);
 
   is_running = true;
@@ -86,15 +87,23 @@ void Game_Events() {
 };
 
 void Game_Update() {
-  //
-  Menu_DetectSelection(&world);
+  if (State_Get()->menu == MENU_CLOSED) {
+    Menu_Hide(&world);
+  }
+
+  if (State_Get()->menu == MENU_OPENED) {
+    Menu_Show(&world, Game_Renderer);
+    Menu_DetectSelection(&world);
+  }
 };
 
 void Game_Render() {
   SDL_RenderClear(Game_Renderer);
 
   DS_Draw(&world, Game_Renderer);
-  Physics_UpdatePosition(&world);
+  if (State_Get()->game == GAME_PLAY) {
+    Physics_UpdatePosition(&world);
+  }
 
   SDL_RenderPresent(Game_Renderer);
 }
