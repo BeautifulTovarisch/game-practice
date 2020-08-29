@@ -56,12 +56,14 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   ECS_AddComponent(
       &world, player,
-      (Component){.type = C_SPRITE,
-                  .component.sprite = {
-                      .texture = DS_LoadTexture("assets/horse_idle_cycle.png",
-                                                Game_Renderer),
-                      .width = 82,
-                      .height = 66}});
+      (Component){
+          .type = C_SPRITE,
+          .component.sprite = {.animated = 1,
+                               .num_frames = 5,
+                               .texture = DS_LoadTexture(
+                                   "assets/horse_run_cycle.png", Game_Renderer),
+                               .width = 82,
+                               .height = 66}});
 
   Menu_Init(&world, Game_Renderer);
 

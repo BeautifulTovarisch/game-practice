@@ -46,6 +46,7 @@ void Menu_Show(World *world, SDL_Renderer *renderer) {
                      (Component){.type = C_SPRITE,
                                  .component.sprite = {.texture = DS_LoadTexture(
                                                           sprites[i], renderer),
+                                                      .animated = 0,
                                                       .width = 64,
                                                       .height = 64}});
 

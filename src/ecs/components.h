@@ -17,6 +17,8 @@ typedef struct Sprite {
   int row;
   int frame;
   int flipped;
+  int animated;
+  int num_frames;
 
   float width;
   float height;
