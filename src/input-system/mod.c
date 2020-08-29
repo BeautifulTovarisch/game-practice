@@ -12,16 +12,16 @@ static void handle_keyboard(World *world, Entity player) {
   const Uint8 *key_state = SDL_GetKeyboardState(0);
 
   if (key_down(key_state, SDL_SCANCODE_LEFT)) {
-    Physics_ChangeVelocity(world, player, (Vector){.x = -2, .y = 0});
+    Physics_Accelerate(world, player, (Vector){.x = -1, .y = 0});
   }
   if (key_down(key_state, SDL_SCANCODE_RIGHT)) {
-    Physics_ChangeVelocity(world, player, (Vector){.x = 2, .y = 0});
+    Physics_Accelerate(world, player, (Vector){.x = 1, .y = 0});
   }
   if (key_down(key_state, SDL_SCANCODE_UP)) {
-    Physics_ChangeVelocity(world, player, (Vector){.x = 0, .y = -2});
+    Physics_Accelerate(world, player, (Vector){.x = 0, .y = -1});
   }
   if (key_down(key_state, SDL_SCANCODE_DOWN)) {
-    Physics_ChangeVelocity(world, player, (Vector){.x = 0, .y = 2});
+    Physics_Accelerate(world, player, (Vector){.x = 0, .y = 1});
   }
 }
 

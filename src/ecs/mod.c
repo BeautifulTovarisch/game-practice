@@ -95,6 +95,10 @@ void ECS_AddComponent(World *world, Entity entity, Component cmp) {
     break;
   case C_COLLISION:
     world->collision_components[position] = cmp.component.collision;
+    break;
+  case C_ACCELERATION:
+    world->acceleration_components[position] = cmp.component.vector;
+    break;
   case C_APPEARANCE:
     world->appearance_components[position] = cmp.component.appearance;
     break;

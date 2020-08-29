@@ -7,16 +7,20 @@
 
 // represents collision box
 typedef struct Collision {
-  Vector origin;
   float width;
   float height;
+
+  Vector origin;
 } Collision;
 
 typedef struct Sprite {
+  int row;
+  int frame;
   int flipped;
 
-  SDL_Rect src;
-  SDL_Rect dest;
+  float width;
+  float height;
+
   SDL_Texture *texture;
 } Sprite;
 

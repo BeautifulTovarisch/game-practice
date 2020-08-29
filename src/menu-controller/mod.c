@@ -42,14 +42,17 @@ static void handle_click(int button) {
 void Menu_Show(World *world, SDL_Renderer *renderer) {
   for (int i = 0; i < NUM_BUTTONS; i++) {
 
+    ECS_AddComponent(world, buttons[i],
+                     (Component){.type = C_SPRITE,
+                                 .component.sprite = {.texture = DS_LoadTexture(
+                                                          sprites[i], renderer),
+                                                      .width = 64,
+                                                      .height = 64}});
+
     ECS_AddComponent(
         world, buttons[i],
-        (Component){
-            .type = C_SPRITE,
-            .component.sprite = {
-                .texture = DS_LoadTexture(sprites[i], renderer),
-                .src = {.w = 64, .h = 64},
-                .dest = {.x = 75, .y = 75 * (i + 1), .w = 64, .h = 48}}});
+        (Component){.type = C_POSITION,
+                    .component.vector = {.x = 75, .y = 75 * (i + 1)}});
 
     ECS_AddComponent(
         world, buttons[i],
