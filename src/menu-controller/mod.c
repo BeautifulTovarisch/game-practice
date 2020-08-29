@@ -26,6 +26,8 @@ static void handle_click(int button) {
     State_Update(GAME_UNPAUSE);
     break;
   case PAUSE:
+    State_Update(MENU_OPEN);
+    State_Update(GAME_PAUSE);
     break;
   case RESUME:
     break;
@@ -41,6 +43,7 @@ static void handle_click(int button) {
 /* Add Sprites and collision for buttons
  * Reusable method for hiding/showing menu at various points
  * TODO :: Consider removing entities and creating new each time
+ * TODO :: Show menu options contingent on current state
  */
 void Menu_Show(World *world, SDL_Renderer *renderer) {
   for (int i = 0; i < NUM_BUTTONS; i++) {

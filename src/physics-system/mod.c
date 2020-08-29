@@ -98,10 +98,10 @@ void Physics_ReduceVelocity(World *world, Entity entity, float scl) {
 
 // Change direction of entity toward vector
 void Physics_ChangeDirection(World *world, Entity entity, Vector v) {
-  int position = ECS_GetEntityPosition(entity);
+  int index = ECS_GetEntityPosition(entity);
 
   if (ECS_HasComponent(world, entity, C_VELOCITY)) {
-    world->velocity_components[position] =
-        Vector_Subtract(&v, &world->velocity_components[position]);
+    Vector position = world->position_components[index];
+    world->velocity_components[index] = Vector_Subtract(&v, &position);
   }
 }

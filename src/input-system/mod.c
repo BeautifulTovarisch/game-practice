@@ -35,10 +35,11 @@ int Input_HandleEvents(SDL_Event event, World *world, Entity player) {
     State_UpdateMousePosition(
         (Vector){.x = event.motion.x, .y = event.motion.y});
 
-    Physics_ChangeDirection(
-        world, player,
-        Vector_Divide(&(Vector){.x = event.motion.x, .y = event.motion.y},
-                      100));
+    // Change velocity in direction of vector
+    Physics_ChangeDirection(world, player,
+                            (Vector){.x = event.motion.x, .y = event.motion.y});
+
+    Physics_ReduceVelocity(world, player, 50);
 
     break;
   case SDL_MOUSEBUTTONUP:
