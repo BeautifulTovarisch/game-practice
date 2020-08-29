@@ -140,5 +140,10 @@ void ECS_RemoveComponent(World *world, Entity entity, ComponentType type) {
 
 int ECS_GetEntityCount() { return entity_count; }
 int ECS_GetEntityPosition(Entity entity) { return entity_map[entity]; }
+// Check component bitmask to see if all flags are set
+int ECS_HasComponent(World *world, Entity entity, int components) {
+  return world->component_mask[ECS_GetEntityPosition(entity)] &
+         components == components;
+}
 
-void ECS_Cleanup() { Queue_Destroy(entity_pool); }
+void ECS_Cleanup() { Queue_Destroy(&entity_pool); }

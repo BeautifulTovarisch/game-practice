@@ -32,6 +32,7 @@ Entity ECS_CreateEntity();
 // Return current entity_count
 int ECS_GetEntityCount();
 int ECS_GetEntityPosition(Entity entity);
+int ECS_HasComponent(World *world, Entity entity, int components);
 
 void ECS_Cleanup();
 void ECS_DestroyEntity(World *world, Entity entity);

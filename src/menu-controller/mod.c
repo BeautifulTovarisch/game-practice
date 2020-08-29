@@ -41,6 +41,7 @@ static void handle_click(int button) {
  */
 void Menu_Show(World *world, SDL_Renderer *renderer) {
   for (int i = 0; i < NUM_BUTTONS; i++) {
+
     ECS_AddComponent(
         world, buttons[i],
         (Component){

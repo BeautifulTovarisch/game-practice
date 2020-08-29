@@ -48,6 +48,10 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   ECS_AddComponent(
       &world, player,
+      (Component){.type = C_VELOCITY, .component.vector = (Vector){0}});
+
+  ECS_AddComponent(
+      &world, player,
       (Component){.type = C_SPRITE,
                   .component.sprite = {
                       .texture = DS_LoadTexture("assets/horse_idle_cycle.png",
@@ -84,6 +88,7 @@ void Game_Render() {
   SDL_RenderClear(Game_Renderer);
 
   DS_Draw(&world, Game_Renderer);
+  Physics_UpdatePosition(&world);
 
   SDL_RenderPresent(Game_Renderer);
 }

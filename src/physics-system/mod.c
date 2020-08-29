@@ -44,6 +44,28 @@ int Physics_VectorCollision(World *world, Entity entity, Vector v) {
          v.y <= (col.origin.y + col.height);
 }
 
+// Update position of entities with Position and Velocity vectors
+void Physics_UpdatePosition(World *world) {
+  for (int entity = 1; entity <= ECS_GetEntityCount(); entity++) {
+
+    int e_pos = ECS_GetEntityPosition(entity);
+
+    if (ECS_HasComponent(world, entity, (C_POSITION | C_VELOCITY))) {
+      Vector velocity = world->velocity_components[e_pos];
+      Vector position = world->position_components[e_pos];
+
+      world->position_components[e_pos] = Vector_Add(&position, &velocity);
+    }
+
+    if (ECS_HasComponent(world, entity, (C_POSITION | C_SPRITE))) {
+      Sprite *sprite = &world->sprite_components[e_pos];
+
+      sprite->dest.x = world->position_components[e_pos].x;
+      sprite->dest.y = world->position_components[e_pos].y;
+    }
+  }
+}
+
 // Add vector to velocity to increase/decrease
 void Physics_ChangeVelocity(World *world, Entity entity, Vector v) {
   // Do nothing if entity hasn't registered a velocity component
