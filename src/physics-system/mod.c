@@ -10,7 +10,9 @@ static int vertical(Collision a, Collision b) {
   return a.origin.y + a.height >= b.origin.y;
 }
 
-int Physics_EntityCollision(World *world, Entity e_a, Entity e_b) {
+int Physics_EntityCollision(Entity e_a, Entity e_b) {
+  World *world = ECS_GetWorld();
+
   int index_a = ECS_GetEntityPosition(e_a),
       index_b = ECS_GetEntityPosition(e_b);
 
@@ -30,7 +32,8 @@ int Physics_EntityCollision(World *world, Entity e_a, Entity e_b) {
 
 // Determine if vector lies inside collision box
 // e.g mouse inside button
-int Physics_VectorCollision(World *world, Entity entity, Vector v) {
+int Physics_VectorCollision(Entity entity, Vector v) {
+  World *world = ECS_GetWorld();
   int index = ECS_GetEntityPosition(entity);
 
   if (!(world->component_mask[index] & C_COLLISION)) {
@@ -45,13 +48,14 @@ int Physics_VectorCollision(World *world, Entity entity, Vector v) {
 }
 
 // Update position of entities with Position and Velocity vectors
-void Physics_UpdatePosition(World *world) {
+void Physics_UpdatePosition() {
+  World *world = ECS_GetWorld();
+
   for (int entity = 1; entity <= ECS_GetEntityCount(); entity++) {
 
     int e_pos = ECS_GetEntityPosition(entity);
 
-    if (ECS_HasComponent(world, entity,
-                         (C_POSITION | C_VELOCITY | C_ACCELERATION))) {
+    if (ECS_HasComponent(entity, (C_POSITION | C_VELOCITY | C_ACCELERATION))) {
       Vector velocity = world->velocity_components[e_pos];
       Vector position = world->position_components[e_pos];
       Vector acceleration = world->acceleration_components[e_pos];
@@ -67,39 +71,24 @@ void Physics_UpdatePosition(World *world) {
   }
 }
 
-void Physics_Accelerate(World *world, Entity entity, Vector v) {
-  if (ECS_HasComponent(world, entity, C_ACCELERATION)) {
+void Physics_Accelerate(Entity entity, Vector v) {
+  World *world = ECS_GetWorld();
+
+  if (ECS_HasComponent(entity, C_ACCELERATION)) {
     int position = ECS_GetEntityPosition(entity);
     world->acceleration_components[position] =
         Vector_Add(&world->acceleration_components[position], &v);
   }
 }
 
-// Add vector to velocity to increase/decrease
-void Physics_ChangeVelocity(World *world, Entity entity, Vector v) {
-  // Do nothing if entity hasn't registered a velocity component
-  if (ECS_HasComponent(world, entity, C_VELOCITY)) {
-    int position = ECS_GetEntityPosition(entity);
-    world->velocity_components[position] =
-        Vector_Add(&world->velocity_components[position], &v);
-  }
-}
-
-// Divide velocity by scalar
-void Physics_ReduceVelocity(World *world, Entity entity, float scl) {
-  if (ECS_HasComponent(world, entity, C_VELOCITY)) {
-    int position = ECS_GetEntityPosition(entity);
-    world->velocity_components[position] =
-        Vector_Divide(&world->velocity_components[position], scl);
-  }
-}
-
 // Change direction of entity toward vector
-void Physics_ChangeDirection(World *world, Entity entity, Vector v) {
-  int index = ECS_GetEntityPosition(entity);
+void Physics_ChangeDirection(Entity entity, Vector v) {
+  World *world = ECS_GetWorld();
 
-  if (ECS_HasComponent(world, entity, C_VELOCITY)) {
-    Vector position = world->position_components[index];
-    world->velocity_components[index] = Vector_Subtract(&v, &position);
+  int position = ECS_GetEntityPosition(entity);
+
+  if (ECS_HasComponent(entity, C_VELOCITY)) {
+    world->velocity_components[position] =
+        Vector_Subtract(&v, &world->velocity_components[position]);
   }
 }

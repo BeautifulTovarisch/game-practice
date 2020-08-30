@@ -18,8 +18,6 @@ Entity player;
 SDL_Window *Game_Window;
 SDL_Renderer *Game_Renderer;
 
-World *Game_GetWorld();
-
 bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
                int flags);
 

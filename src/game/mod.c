@@ -5,10 +5,6 @@
 
 bool is_running = false;
 
-World world;
-
-Entity ball;
-
 SDL_Window *Game_Window = NULL;
 SDL_Renderer *Game_Renderer = NULL;
 
@@ -35,12 +31,10 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   SDL_SetRenderDrawColor(Game_Renderer, 0, 0, 0, 255);
 
-  world = ECS_Init();
-
-  ball = ECS_CreateEntity();
+  ECS_Init();
 
   State_Init();
-  Menu_Init(&world, Game_Renderer);
+  Menu_Init(Game_Renderer);
 
   is_running = true;
 
@@ -53,7 +47,7 @@ void Game_Events() {
   SDL_Event event;
 
   while (SDL_PollEvent(&event)) {
-    if (!Input_HandleEvents(event, &world, player)) {
+    if (!Input_HandleEvents(event)) {
       is_running = false;
       break;
     }
@@ -63,10 +57,10 @@ void Game_Events() {
 void Game_Update() {
   switch (State_Get()->menu) {
   case MENU_CLOSED:
-    Menu_Hide(&world);
+    Menu_Hide();
     break;
   case MENU_OPENED:
-    Menu_Show(&world, Game_Renderer);
+    Menu_Show(Game_Renderer);
   default:
     break;
   }
@@ -75,7 +69,7 @@ void Game_Update() {
   // Change velocity in direction of vector
   switch (State_Get()->game) {
   case GAME_PLAY:
-    Physics_UpdatePosition(&world);
+    Physics_UpdatePosition();
     break;
   default:
     break;
@@ -85,7 +79,7 @@ void Game_Update() {
 void Game_Render() {
   SDL_RenderClear(Game_Renderer);
 
-  DS_Draw(&world, Game_Renderer);
+  DS_Draw(Game_Renderer);
 
   SDL_RenderPresent(Game_Renderer);
 }

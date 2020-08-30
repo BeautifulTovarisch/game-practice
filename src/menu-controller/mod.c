@@ -23,8 +23,6 @@ static void handle_click(int button) {
     State_Update(GAME_UNPAUSE);
     break;
   case PAUSE:
-    State_Update(MENU_OPEN);
-    State_Update(GAME_PAUSE);
     break;
   case RESUME:
     break;
@@ -40,10 +38,11 @@ static void handle_click(int button) {
 /* Add Sprites for menu
  * Reusable method for hiding/showing menu at various points
  * TODO :: Consider removing entities and creating new each time
- * TODO :: Show menu options contingent on current state
  */
-void Menu_Show(World *world, SDL_Renderer *renderer) {
+void Menu_Show(SDL_Renderer *renderer) {
   int width, height, w_width, w_height;
+
+  World *world = ECS_GetWorld();
 
   for (int i = 0; i < NUM_BUTTONS; i++) {
     SDL_Texture *tex = DS_LoadTexture(sprites[i], renderer);
@@ -54,14 +53,14 @@ void Menu_Show(World *world, SDL_Renderer *renderer) {
     int center_x = (w_width - width) / 2;
     int center_y = (w_height - height) / 2;
 
-    ECS_AddComponent(world, buttons[i],
+    ECS_AddComponent(buttons[i],
                      (Component){.type = C_SPRITE,
                                  .component.sprite = {.texture = tex,
                                                       .animated = 0,
                                                       .width = width,
                                                       .height = height}});
 
-    ECS_AddComponent(world, buttons[i],
+    ECS_AddComponent(buttons[i],
                      (Component){.type = C_POSITION,
                                  .component.vector =
                                      (Vector){.x = center_x, .y = center_y}});
@@ -71,18 +70,23 @@ void Menu_Show(World *world, SDL_Renderer *renderer) {
 /* Removing sprite and collision components will prevent the draw
  * and physics systems from handling the buttons void
  */
-void Menu_Hide(World *world) {
+void Menu_Hide() {
+  World *world = ECS_GetWorld();
+
   for (int i = 0; i < NUM_BUTTONS; i++) {
-    ECS_RemoveComponent(world, buttons[i], C_SPRITE);
+    ECS_RemoveComponent(buttons[i], C_POSITION);
+    ECS_RemoveComponent(buttons[i], C_SPRITE);
   }
 }
 
-void Menu_Init(World *world, SDL_Renderer *renderer) {
+void Menu_Init(SDL_Renderer *renderer) {
+
+  World *world = ECS_GetWorld();
 
   // Initialize buttons
   for (int i = 0; i < NUM_BUTTONS; i++) {
     buttons[i] = ECS_CreateEntity();
   }
 
-  Menu_Show(world, renderer);
+  Menu_Show(renderer);
 }

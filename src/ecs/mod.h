@@ -25,18 +25,19 @@ typedef struct World {
   Appearance appearance_components[MAX_ENTITIES];
 } World;
 
-World ECS_Init();
-
+World *ECS_GetWorld();
 Entity ECS_CreateEntity();
+Component *ECS_GetComponent(Entity e, ComponentType type);
 
 // Return current entity_count
 int ECS_GetEntityCount();
 int ECS_GetEntityPosition(Entity entity);
-int ECS_HasComponent(World *world, Entity entity, int components);
+int ECS_HasComponent(Entity entity, int components);
 
+void ECS_Init();
 void ECS_Cleanup();
-void ECS_DestroyEntity(World *world, Entity entity);
-void ECS_AddComponent(World *world, Entity entity, Component cmp);
-void ECS_RemoveComponent(World *world, Entity entity, ComponentType type);
+void ECS_DestroyEntity(Entity entity);
+void ECS_AddComponent(Entity entity, Component cmp);
+void ECS_RemoveComponent(Entity entity, ComponentType type);
 
 #endif

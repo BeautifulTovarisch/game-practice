@@ -8,6 +8,6 @@
 
 SDL_Texture *DS_LoadTexture(const char *file, SDL_Renderer *renderer);
 
-void DS_Draw(World *world, SDL_Renderer *renderer);
+void DS_Draw(SDL_Renderer *renderer);
 
 #endif

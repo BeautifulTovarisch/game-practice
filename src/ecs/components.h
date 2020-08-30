@@ -43,14 +43,16 @@ typedef enum {
   C_COLLISION = 1 << 5
 } ComponentType;
 
+typedef union ComponentData {
+  Sprite sprite;
+  Vector vector;
+  Collision collision;
+  Appearance appearance;
+} ComponentData;
+
 typedef struct Component {
   ComponentType type;
-  union component {
-    Sprite sprite;
-    Vector vector;
-    Collision collision;
-    Appearance appearance;
-  } component;
+  ComponentData component;
 } Component;
 
 #endif
