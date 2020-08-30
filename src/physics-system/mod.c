@@ -58,14 +58,12 @@ void Physics_UpdatePosition(World *world) {
 
       world->velocity_components[e_pos] = Vector_Add(&velocity, &acceleration);
       world->position_components[e_pos] = Vector_Add(&position, &velocity);
+
+      // Apply friction/gravity
+
+      world->acceleration_components[e_pos] =
+          Vector_Multiply(&acceleration, 0.9);
     }
-
-    /* if (ECS_HasComponent(world, entity, (C_POSITION | C_SPRITE))) { */
-    /*   Sprite *sprite = &world->sprite_components[e_pos]; */
-
-    /*   sprite->dest.x = world->position_components[e_pos].x; */
-    /*   sprite->dest.y = world->position_components[e_pos].y; */
-    /* } */
   }
 }
 

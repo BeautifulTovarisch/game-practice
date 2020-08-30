@@ -16,7 +16,4 @@ void Menu_Hide(World *world);
 void Menu_Init(World *world, SDL_Renderer *renderer);
 void Menu_Show(World *world, SDL_Renderer *renderer);
 
-// Check for vector collision between button and mouse position
-void Menu_DetectSelection(World *world);
-
 #endif

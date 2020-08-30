@@ -48,9 +48,11 @@ static void draw(Sprite *sprite, Vector pos, SDL_Renderer *renderer) {
 void DS_Draw(World *world, SDL_Renderer *renderer) {
   for (int i = 1; i <= ECS_GetEntityCount(); i++) {
     int index = ECS_GetEntityPosition(i);
+
     if (ECS_HasComponent(world, i, C_POSITION | C_SPRITE)) {
       Vector position = world->position_components[index];
       Sprite *sprite = &world->sprite_components[index];
+
       sprite->flipped = is_flipped(world, i);
 
       draw(sprite, position, renderer);

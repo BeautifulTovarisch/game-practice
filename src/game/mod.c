@@ -7,12 +7,10 @@ bool is_running = false;
 
 World world;
 
-Entity player;
+Entity ball;
 
 SDL_Window *Game_Window = NULL;
 SDL_Renderer *Game_Renderer = NULL;
-
-World *Game_GetWorld() { return &world; }
 
 bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
                int flags) {
@@ -35,35 +33,11 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
     return false;
   }
 
-  SDL_SetRenderDrawColor(Game_Renderer, 255, 255, 255, 255);
+  SDL_SetRenderDrawColor(Game_Renderer, 0, 0, 0, 255);
 
   world = ECS_Init();
 
-  player = ECS_CreateEntity();
-
-  ECS_AddComponent(
-      &world, player,
-      (Component){.type = C_POSITION,
-                  .component.vector = (Vector){.x = 82.5, .y = 67.5}});
-
-  ECS_AddComponent(
-      &world, player,
-      (Component){.type = C_VELOCITY, .component.vector = (Vector){0}});
-
-  ECS_AddComponent(
-      &world, player,
-      (Component){.type = C_ACCELERATION, .component.vector = (Vector){0}});
-
-  ECS_AddComponent(
-      &world, player,
-      (Component){
-          .type = C_SPRITE,
-          .component.sprite = {.animated = 1,
-                               .num_frames = 5,
-                               .texture = DS_LoadTexture(
-                                   "assets/horse_run_cycle.png", Game_Renderer),
-                               .width = 82,
-                               .height = 66}});
+  ball = ECS_CreateEntity();
 
   State_Init();
   Menu_Init(&world, Game_Renderer);
@@ -82,28 +56,36 @@ void Game_Events() {
     if (!Input_HandleEvents(event, &world, player)) {
       is_running = false;
       break;
-    };
-  };
-};
+    }
+  }
+}
 
 void Game_Update() {
-  if (State_Get()->menu == MENU_CLOSED) {
+  switch (State_Get()->menu) {
+  case MENU_CLOSED:
     Menu_Hide(&world);
+    break;
+  case MENU_OPENED:
+    Menu_Show(&world, Game_Renderer);
+  default:
+    break;
   }
 
-  if (State_Get()->menu == MENU_OPENED) {
-    Menu_Show(&world, Game_Renderer);
-    Menu_DetectSelection(&world);
+  // TODO :: Refactor into player-specific controller
+  // Change velocity in direction of vector
+  switch (State_Get()->game) {
+  case GAME_PLAY:
+    Physics_UpdatePosition(&world);
+    break;
+  default:
+    break;
   }
-};
+}
 
 void Game_Render() {
   SDL_RenderClear(Game_Renderer);
 
   DS_Draw(&world, Game_Renderer);
-  if (State_Get()->game == GAME_PLAY) {
-    Physics_UpdatePosition(&world);
-  }
 
   SDL_RenderPresent(Game_Renderer);
 }
@@ -116,6 +98,6 @@ void Game_Clean() {
   SDL_Quit();
 
   printf("Cleanup complete.\n");
-};
+}
 
 bool Game_IsRunning() { return is_running; }

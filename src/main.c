@@ -2,6 +2,9 @@
 
 #include "game/mod.h"
 
+#define WINDOW_H 480
+#define WINDOW_W 640
+
 int main() {
   const int FPS = 60;
   const int FRAME_DELAY = 1000 / FPS;
@@ -10,8 +13,8 @@ int main() {
   int frame_time;
 
   // Initialize graphics
-  if (!Game_Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640,
-                 480, 0)) {
+  if (!Game_Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                 WINDOW_W, WINDOW_H, 0)) {
     printf("Game failed to initialize: %s\n", SDL_GetError());
     return 1;
   }

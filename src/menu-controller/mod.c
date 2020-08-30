@@ -1,12 +1,9 @@
 #include "mod.h"
 
-#define NUM_BUTTONS 5
+#define NUM_BUTTONS 1
 
 // Keep track of which button is which entity
-static char *sprites[NUM_BUTTONS] = {
-    "assets/play_button.png", "assets/play_button.png",
-    "assets/play_button.png", "assets/play_button.png",
-    "assets/play_button.png"};
+static char *sprites[NUM_BUTTONS] = {"assets/pong_title.png"};
 
 /* Buttons are identified by their static positions:
  *   Button 0 - Play
@@ -40,35 +37,34 @@ static void handle_click(int button) {
   }
 }
 
-/* Add Sprites and collision for buttons
+/* Add Sprites for menu
  * Reusable method for hiding/showing menu at various points
  * TODO :: Consider removing entities and creating new each time
  * TODO :: Show menu options contingent on current state
  */
 void Menu_Show(World *world, SDL_Renderer *renderer) {
+  int width, height, w_width, w_height;
+
   for (int i = 0; i < NUM_BUTTONS; i++) {
+    SDL_Texture *tex = DS_LoadTexture(sprites[i], renderer);
+
+    SDL_QueryTexture(tex, NULL, NULL, &width, &height);
+    SDL_GetRendererOutputSize(renderer, &w_width, &w_height);
+
+    int center_x = (w_width - width) / 2;
+    int center_y = (w_height - height) / 2;
 
     ECS_AddComponent(world, buttons[i],
                      (Component){.type = C_SPRITE,
-                                 .component.sprite = {.texture = DS_LoadTexture(
-                                                          sprites[i], renderer),
+                                 .component.sprite = {.texture = tex,
                                                       .animated = 0,
-                                                      .width = 64,
-                                                      .height = 64}});
+                                                      .width = width,
+                                                      .height = height}});
 
-    ECS_AddComponent(
-        world, buttons[i],
-        (Component){.type = C_POSITION,
-                    .component.vector = {.x = 75, .y = 75 * (i + 1)}});
-
-    ECS_AddComponent(
-        world, buttons[i],
-        (Component){.type = C_COLLISION,
-                    .component.collision = {
-                        .origin = (Vector){.x = 75, .y = 75 * (i + 1)},
-
-                        .width = 64,
-                        .height = 48}});
+    ECS_AddComponent(world, buttons[i],
+                     (Component){.type = C_POSITION,
+                                 .component.vector =
+                                     (Vector){.x = center_x, .y = center_y}});
   }
 }
 
@@ -78,8 +74,6 @@ void Menu_Show(World *world, SDL_Renderer *renderer) {
 void Menu_Hide(World *world) {
   for (int i = 0; i < NUM_BUTTONS; i++) {
     ECS_RemoveComponent(world, buttons[i], C_SPRITE);
-    ECS_RemoveComponent(world, buttons[i], C_POSITION);
-    ECS_RemoveComponent(world, buttons[i], C_COLLISION);
   }
 }
 
@@ -91,16 +85,4 @@ void Menu_Init(World *world, SDL_Renderer *renderer) {
   }
 
   Menu_Show(world, renderer);
-}
-
-void Menu_DetectSelection(World *world) {
-  for (int i = 0; i < NUM_BUTTONS; i++) {
-    if (Physics_VectorCollision(world, buttons[i],
-                                State_Get()->mouse.position)) {
-      // Nested if here to only check for click when over a button
-      if (State_Get()->mouse.buttons & SDL_BUTTON_LEFT) {
-        handle_click(i);
-      }
-    }
-  }
 }

@@ -17,6 +17,10 @@ Vector Vector_Multiply(Vector *v, float scalar) {
   return (Vector){.x = v->x * scalar, .y = v->y * scalar};
 }
 
+float Vector_Dot(Vector *v1, Vector *v2) {
+  return (v1->x * v2->x) + (v1->y * v2->y);
+}
+
 float Vector_Magnitude(Vector *v) { return sqrt(v->x * v->x + v->y * v->y); }
 
 void Vector_Normalize(Vector *v) {
