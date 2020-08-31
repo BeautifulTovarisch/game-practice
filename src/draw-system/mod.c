@@ -42,24 +42,14 @@ static int is_flipped(Entity e) {
 }
 
 void DS_Draw(SDL_Renderer *renderer) {
-  World *world = ECS_GetWorld();
-
   for (int entity = 1; entity <= ECS_GetEntityCount(); entity++) {
-
-    int index = ECS_GetEntityPosition(entity);
-
     if (ECS_HasComponent(entity, C_POSITION | C_SPRITE)) {
-      Vector position = world->position_components[index];
-      Sprite *sprite = &world->sprite_components[index];
+      Sprite *sprite = &ECS_GetComponent(entity, C_SPRITE)->component.sprite;
+      Vector position = ECS_GetComponent(entity, C_POSITION)->component.vector;
 
       sprite->flipped = is_flipped(entity);
 
       draw(sprite, position, renderer);
-
-      if (ECS_HasComponent(entity, C_POSITION | C_SPRITE)) {
-        Vector position = world->position_components[entity];
-        draw(&world->sprite_components[entity], position, renderer);
-      }
     }
   }
 }

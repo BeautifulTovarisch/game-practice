@@ -5,7 +5,7 @@ static int key_down(const Uint8 *key_state, SDL_Scancode key) {
 }
 
 static void handle_keyboard(Entity player) {
-  if (!player || !State_Get()->game == GAME_PLAY) {
+  if (player == 0 || !State_Get()->game == GAME_PLAY) {
     return;
   }
 
@@ -18,11 +18,11 @@ static void handle_keyboard(Entity player) {
     Physics_Accelerate(player, (Vector){.x = 1, .y = 0});
   }
 
-  /* Physics_ReduceVelocity(player, 50); */
+  Physics_ApplyFriction(player, 0.90);
 }
 
 // Pass the player entity to the physics system
-int Input_HandleEvents(SDL_Event event) {
+int Input_HandleEvents(Entity player, SDL_Event event) {
   switch (event.type) {
   case SDL_QUIT:
     return 0;
@@ -42,7 +42,7 @@ int Input_HandleEvents(SDL_Event event) {
     break;
   }
 
-  handle_keyboard(1);
+  handle_keyboard(player);
 
   return 1;
 }

@@ -9,6 +9,6 @@
 #include "../physics-system/mod.h"
 #include "../state-controller/mod.h"
 
-int Input_HandleEvents(SDL_Event event);
+int Input_HandleEvents(Entity player, SDL_Event event);
 
 #endif

@@ -2,8 +2,8 @@
 
 #define NUM_BUTTONS 1
 
-// Keep track of which button is which entity
-static char *sprites[NUM_BUTTONS] = {"assets/pong_title.png"};
+// Order of sprites here corresponds to below.
+static char *sprites[NUM_BUTTONS] = {"assets/game_title.png"};
 
 /* Buttons are identified by their static positions:
  *   Button 0 - Play
@@ -42,8 +42,6 @@ static void handle_click(int button) {
 void Menu_Show(SDL_Renderer *renderer) {
   int width, height, w_width, w_height;
 
-  World *world = ECS_GetWorld();
-
   for (int i = 0; i < NUM_BUTTONS; i++) {
     SDL_Texture *tex = DS_LoadTexture(sprites[i], renderer);
 
@@ -71,8 +69,6 @@ void Menu_Show(SDL_Renderer *renderer) {
  * and physics systems from handling the buttons void
  */
 void Menu_Hide() {
-  World *world = ECS_GetWorld();
-
   for (int i = 0; i < NUM_BUTTONS; i++) {
     ECS_RemoveComponent(buttons[i], C_POSITION);
     ECS_RemoveComponent(buttons[i], C_SPRITE);
@@ -80,9 +76,6 @@ void Menu_Hide() {
 }
 
 void Menu_Init(SDL_Renderer *renderer) {
-
-  World *world = ECS_GetWorld();
-
   // Initialize buttons
   for (int i = 0; i < NUM_BUTTONS; i++) {
     buttons[i] = ECS_CreateEntity();
