@@ -174,4 +174,7 @@ int ECS_HasComponent(Entity entity, int components) {
          components == components;
 }
 
-void ECS_Cleanup() { Queue_Destroy(&entity_pool); }
+void ECS_Cleanup() {
+  world = NULL;
+  Queue_Destroy(&entity_pool);
+}

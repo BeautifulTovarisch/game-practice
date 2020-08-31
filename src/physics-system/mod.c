@@ -1,94 +1,78 @@
 #include "mod.h"
 
-// Collisions are checked 'from the left'
-// Reverse order of collision parameters to check other border
-static int horizontal(Collision a, Collision b) {
-  return a.origin.x + a.width >= b.origin.x;
-}
-
-static int vertical(Collision a, Collision b) {
-  return a.origin.y + a.height >= b.origin.y;
-}
+/* Detect collisions by separating axis theorem.
+ * Only need to write 'half' the axis test as parameter
+ * order is swapped in order to accommodate.
+ */
+static int separating_x(Collision a, Collision b) { return a.max.x < b.min.x; }
+static int separating_y(Collision a, Collision b) { return a.max.y < b.min.y; }
 
 int Physics_EntityCollision(Entity e_a, Entity e_b) {
-  World *world = ECS_GetWorld();
+  // Get collision boxes
+  Collision coll_a = ECS_GetComponent(e_a, C_COLLISION)->component.collision,
+            coll_b = ECS_GetComponent(e_a, C_COLLISION)->component.collision;
 
-  int index_a = ECS_GetEntityPosition(e_a),
-      index_b = ECS_GetEntityPosition(e_b);
-
-  // Check for possiblity of collision
-  if (!(world->component_mask[index_a] & C_COLLISION) ||
-      !(world->component_mask[index_b] & C_COLLISION)) {
+  // If separating axes are found in either direction
+  if (separating_x(coll_a, coll_b) || separating_x(coll_b, coll_a)) {
+    return 0;
+  }
+  if (separating_y(coll_a, coll_b) || separating_y(coll_b, coll_a)) {
     return 0;
   }
 
-  // Get collision boxes
-  Collision coll_a = world->collision_components[index_a],
-            coll_b = world->collision_components[index_b];
-
-  return (horizontal(coll_a, coll_b) || horizontal(coll_b, coll_a)) &&
-         (vertical(coll_a, coll_b) || vertical(coll_b, coll_a));
+  return 1;
 }
 
-// Determine if vector lies inside collision box
+// Determine if collision lies inside collision box
 // e.g mouse inside button
 int Physics_VectorCollision(Entity entity, Vector v) {
-  World *world = ECS_GetWorld();
-  int index = ECS_GetEntityPosition(entity);
-
-  if (!(world->component_mask[index] & C_COLLISION)) {
+  if (!ECS_HasComponent(entity, C_COLLISION)) {
     return 0;
   }
 
-  Collision col = world->collision_components[index];
+  Collision col = ECS_GetComponent(entity, C_COLLISION)->component.collision;
 
-  return v.x >= col.origin.x && v.y >= col.origin.y &&
-         v.x <= (col.origin.x + col.width) &&
-         v.y <= (col.origin.y + col.height);
+  return v.x >= col.min.x && v.y >= col.min.y && v.x <= (col.max.x) &&
+         v.y <= (col.max.y);
 }
 
 // Update position of entities with Position and Velocity vectors
 void Physics_UpdatePosition() {
-  World *world = ECS_GetWorld();
-
   for (int entity = 1; entity <= ECS_GetEntityCount(); entity++) {
-
-    int e_pos = ECS_GetEntityPosition(entity);
-
     if (ECS_HasComponent(entity, (C_POSITION | C_VELOCITY | C_ACCELERATION))) {
-      Vector velocity = world->velocity_components[e_pos];
-      Vector position = world->position_components[e_pos];
-      Vector acceleration = world->acceleration_components[e_pos];
+      Vector *velocity =
+          &ECS_GetComponent(entity, C_VELOCITY)->component.vector;
+      Vector *position =
+          &ECS_GetComponent(entity, C_POSITION)->component.vector;
+      Vector *acceleration =
+          &ECS_GetComponent(entity, C_ACCELERATION)->component.vector;
 
-      world->velocity_components[e_pos] = Vector_Add(&velocity, &acceleration);
-      world->position_components[e_pos] = Vector_Add(&position, &velocity);
-
-      // Apply friction/gravity
-
-      world->acceleration_components[e_pos] =
-          Vector_Multiply(&acceleration, 0.9);
+      *velocity = Vector_Add(velocity, acceleration);
+      *position = Vector_Add(position, velocity);
     }
   }
 }
 
 void Physics_Accelerate(Entity entity, Vector v) {
-  World *world = ECS_GetWorld();
-
-  if (ECS_HasComponent(entity, C_ACCELERATION)) {
-    int position = ECS_GetEntityPosition(entity);
-    world->acceleration_components[position] =
-        Vector_Add(&world->acceleration_components[position], &v);
+  if (ECS_HasComponent(entity, C_POSITION | C_ACCELERATION)) {
+    Vector *acceleration =
+        &ECS_GetComponent(entity, C_ACCELERATION)->component.vector;
+    *acceleration = Vector_Add(acceleration, &v);
   }
 }
 
-// Change direction of entity toward vector
+void Physics_ApplyFriction(Entity entity, float scalar) {
+  if (ECS_HasComponent(entity, C_ACCELERATION)) {
+    Vector *acceleration =
+        &ECS_GetComponent(entity, C_ACCELERATION)->component.vector;
+    *acceleration = Vector_Multiply(acceleration, 0.99);
+  }
+}
+
+// Change direction of entity toward collision
 void Physics_ChangeDirection(Entity entity, Vector v) {
-  World *world = ECS_GetWorld();
-
-  int position = ECS_GetEntityPosition(entity);
-
   if (ECS_HasComponent(entity, C_VELOCITY)) {
-    world->velocity_components[position] =
-        Vector_Subtract(&v, &world->velocity_components[position]);
+    Vector *velocity = &ECS_GetComponent(entity, C_VELOCITY)->component.vector;
+    *velocity = Vector_Subtract(&v, velocity);
   }
 }

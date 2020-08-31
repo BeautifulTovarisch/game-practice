@@ -1,6 +1,9 @@
 #ifndef PHYSICS_SYSTEM_H
 #define PHYSICS_SYSTEM_H
 
+#define GRAVITY 9.8f
+#define UNIT_MASS 1.0f
+
 #include <stdio.h>
 
 #include "../ecs/components.h"

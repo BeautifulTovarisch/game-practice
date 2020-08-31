@@ -38,8 +38,7 @@ static void draw(Sprite *sprite, Vector pos, SDL_Renderer *renderer) {
 }
 
 static int is_flipped(Entity e) {
-  //
-  return 0;
+  return ECS_GetComponent(e, C_VELOCITY)->component.vector.x > 0;
 }
 
 void DS_Draw(SDL_Renderer *renderer) {

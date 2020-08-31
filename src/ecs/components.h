@@ -7,10 +7,8 @@
 
 // represents collision box
 typedef struct Collision {
-  float width;
-  float height;
-
-  Vector origin;
+  Vector min;
+  Vector max;
 } Collision;
 
 typedef struct Sprite {

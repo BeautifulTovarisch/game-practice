@@ -34,7 +34,7 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
   ECS_Init();
 
   State_Init();
-  Menu_Init(Game_Renderer);
+  /* Menu_Init(Game_Renderer); */
 
   is_running = true;
 
@@ -56,11 +56,11 @@ void Game_Events() {
 
 void Game_Update() {
   switch (State_Get()->menu) {
-  case MENU_CLOSED:
-    Menu_Hide();
-    break;
-  case MENU_OPENED:
-    Menu_Show(Game_Renderer);
+  /* case MENU_CLOSED: */
+  /*   Menu_Hide(); */
+  /*   break; */
+  /* case MENU_OPENED: */
+  /*   Menu_Show(Game_Renderer); */
   default:
     break;
   }
