@@ -16,6 +16,9 @@ void State_Update(Action action) {
   case GAME_END:
     state.game = GAME_OVER;
     break;
+  case GAME_START:
+    state.game |= GAME_PLAY;
+    break;
   case GAME_TOGGLE_PAUSE:
     state.game ^= GAME_PAUSED;
     break;

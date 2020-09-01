@@ -20,8 +20,8 @@ static Entity buttons[NUM_BUTTONS];
 static void handle_selection() {
   switch (current_selection) {
   case PLAY:
+    State_Update(GAME_START);
     State_Update(MENU_TOGGLE);
-    State_Update(GAME_TOGGLE_PAUSE);
     break;
   case PAUSE:
     break;
@@ -43,6 +43,15 @@ void Menu_HandleInput(SDL_Event event) {
     case SDLK_RETURN:
       // Make Selection
       handle_selection();
+      break;
+    case SDLK_UP:
+      // TODO :: Consider wrap around of menu options
+      current_selection =
+          current_selection > 0 ? current_selection-- : NUM_BUTTONS;
+      break;
+    case SDLK_DOWN:
+      current_selection =
+          current_selection < NUM_BUTTONS ? current_selection++ : 0;
       break;
     }
   default:

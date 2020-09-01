@@ -3,6 +3,7 @@
 
 #include "mod.h"
 
+// Entity 0 is treated as a NULL id
 Entity player = 0;
 
 SDL_Window *Game_Window = NULL;
@@ -48,12 +49,10 @@ void Game_Events() {
   State *state = State_Get();
 
   while (SDL_PollEvent(&event)) {
+    // TODO :: Add state representing true program exit rather than game over.
     if (state->game == GAME_OVER) {
       break;
     }
-
-    printf("Paused %d\n", state->game);
-    printf("Menu open %d\n", state->menu_open);
 
     // Unconditionally handle quit, pause, etc...
     Input_HandleGameInput(event);

@@ -29,7 +29,8 @@ typedef enum {
   MOUSE_RELEASE = 1 << 2,
 
   GAME_END = 1 << 3,
-  GAME_TOGGLE_PAUSE = 1 << 4
+  GAME_START = 1 << 4,
+  GAME_TOGGLE_PAUSE = 1 << 5
 } Action;
 
 // Game state
