@@ -3,14 +3,16 @@
 
 #include "../util/vector/mod.h"
 
-typedef enum { MENU_CLOSED = 0, MENU_OPENED = 1 << 0 } MenuState;
-
 // Buttons represented as Bitmask
 typedef struct MouseState {
   int buttons;
   Vector position;
 } MouseState;
 
+/*
+ * Game state represented here as a small bitmask, allowing for combos
+ * such as: GAME_PLAY|GAME_PAUSED
+ */
 typedef enum {
   GAME_DEFAULT = 0,
   GAME_PLAY = 1 << 0,
@@ -21,21 +23,20 @@ typedef enum {
 typedef enum {
   ACTION_NONE = 0,
 
-  MENU_OPEN = 1 << 0,
-  MENU_CLOSE = 1 << 1,
+  MENU_TOGGLE = 1 << 0,
 
-  MOUSE_CLICK = 1 << 2,
-  MOUSE_RELEASE = 1 << 3,
+  MOUSE_CLICK = 1 << 1,
+  MOUSE_RELEASE = 1 << 2,
 
-  GAME_END = 1 << 4,
-  GAME_PAUSE = 1 << 5,
-  GAME_UNPAUSE = 1 << 6
+  GAME_END = 1 << 3,
+  GAME_TOGGLE_PAUSE = 1 << 4
 } Action;
 
 // Game state
 typedef struct State {
+  int menu_open;
+
   GameState game;
-  MenuState menu;
   MouseState mouse;
 } State;
 

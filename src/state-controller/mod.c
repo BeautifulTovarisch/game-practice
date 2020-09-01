@@ -4,50 +4,20 @@ static State state;
 
 void State_Init() {
   state = (State){.game = GAME_DEFAULT,
-                  .menu = MENU_OPENED,
+                  .menu_open = 1,
                   .mouse = (MouseState){.buttons = 0, .position = (Vector){}}};
 };
 
-static void update_menu(Action action) {
+void State_Update(Action action) {
   switch (action) {
-    // TODO :: Consider unified 'toggle' menu action
-  case MENU_OPEN:
-    state.menu = MENU_OPENED;
+  case MENU_TOGGLE:
+    state.menu_open = !state.menu_open;
     break;
-  case MENU_CLOSE:
-    state.menu = MENU_CLOSED;
-    break;
-  default:
-    return;
-  }
-}
-
-static void update_game(Action action) {
-  switch (action) {
   case GAME_END:
     state.game = GAME_OVER;
     break;
-  case GAME_PAUSE:
-    state.game = GAME_PAUSED;
-    break;
-  case GAME_UNPAUSE:
-    state.game = GAME_PLAY;
-    break;
-  default:
-    return;
-  }
-}
-
-void State_Update(Action action) {
-  switch (action) {
-  case MENU_OPEN:
-  case MENU_CLOSE:
-    update_menu(action);
-    break;
-  case GAME_END:
-  case GAME_PAUSE:
-  case GAME_UNPAUSE:
-    update_game(action);
+  case GAME_TOGGLE_PAUSE:
+    state.game ^= GAME_PAUSED;
     break;
   default:
     return;

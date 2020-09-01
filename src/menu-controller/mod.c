@@ -13,14 +13,15 @@ static char *sprites[NUM_BUTTONS] = {"assets/game_title.png"};
  *   Button 4 - Quit
  */
 
+static int current_selection;
 static Entity buttons[NUM_BUTTONS];
 
 // Set state depending on button pressed
-static void handle_click(int button) {
-  switch (button) {
+static void handle_selection() {
+  switch (current_selection) {
   case PLAY:
-    State_Update(MENU_CLOSE);
-    State_Update(GAME_UNPAUSE);
+    State_Update(MENU_TOGGLE);
+    State_Update(GAME_TOGGLE_PAUSE);
     break;
   case PAUSE:
     break;
@@ -31,7 +32,21 @@ static void handle_click(int button) {
   case QUIT:
     break;
   default:
-    return;
+    break;
+  }
+}
+
+void Menu_HandleInput(SDL_Event event) {
+  switch (event.type) {
+  case SDL_KEYDOWN:
+    switch (event.key.keysym.sym) {
+    case SDLK_RETURN:
+      // Make Selection
+      handle_selection();
+      break;
+    }
+  default:
+    break;
   }
 }
 
@@ -63,6 +78,10 @@ void Menu_Show(SDL_Renderer *renderer) {
                                  .component.vector =
                                      (Vector){.x = center_x, .y = center_y}});
   }
+
+  // Set current menu option to the first button
+  // TODO :: Update selection with arrow keys
+  current_selection = 0;
 }
 
 /* Removing sprite and collision components will prevent the draw

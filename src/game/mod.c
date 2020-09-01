@@ -3,8 +3,6 @@
 
 #include "mod.h"
 
-bool is_running = false;
-
 Entity player = 0;
 
 SDL_Window *Game_Window = NULL;
@@ -39,8 +37,6 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   player = ECS_CreateEntity();
 
-  is_running = true;
-
   printf("Initialization success.\n");
 
   return true;
@@ -49,33 +45,34 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 void Game_Events() {
   SDL_Event event;
 
+  State *state = State_Get();
+
   while (SDL_PollEvent(&event)) {
-    if (!Input_HandleEvents(player, event)) {
-      is_running = false;
+    if (state->game == GAME_OVER) {
       break;
+    }
+
+    printf("Paused %d\n", state->game);
+    printf("Menu open %d\n", state->menu_open);
+
+    // Unconditionally handle quit, pause, etc...
+    Input_HandleGameInput(event);
+
+    if (state->menu_open) {
+      Menu_HandleInput(event);
+    }
+
+    if (state->game & GAME_PLAY == GAME_PLAY) {
+      Input_HandlePlayerInput(player, event);
     }
   }
 }
 
 void Game_Update() {
-  switch (State_Get()->menu) {
-  case MENU_CLOSED:
-    Menu_Hide();
-    break;
-  case MENU_OPENED:
-    Menu_Show(Game_Renderer);
-  default:
-    break;
-  }
+  State_Get()->menu_open ? Menu_Show(Game_Renderer) : Menu_Hide();
 
-  // TODO :: Refactor into player-specific controller
-  // Change velocity in direction of vector
-  switch (State_Get()->game) {
-  case GAME_PLAY:
+  if (State_Get()->game == GAME_PLAY) {
     Physics_UpdatePosition();
-    break;
-  default:
-    break;
   }
 }
 
@@ -97,4 +94,4 @@ void Game_Clean() {
   printf("Cleanup complete.\n");
 }
 
-bool Game_IsRunning() { return is_running; }
+bool Game_IsRunning() { return State_Get()->game != GAME_OVER; }
