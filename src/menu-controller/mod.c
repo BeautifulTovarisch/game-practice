@@ -37,12 +37,14 @@ void Menu_HandleInput(SDL_Event event) {
   switch (event.type) {
   case SDL_KEYDOWN:
     switch (event.key.keysym.sym) {
+    case SDLK_ESCAPE:
+      State_Update(GAME_TOGGLE_PAUSE);
+      break;
     case SDLK_RETURN:
       // Make Selection
       handle_selection();
       break;
     case SDLK_UP:
-      // TODO :: Consider wrap around of menu options
       current_selection =
           current_selection > 0 ? current_selection-- : num_components;
       break;
@@ -50,9 +52,9 @@ void Menu_HandleInput(SDL_Event event) {
       current_selection =
           current_selection < num_components ? current_selection++ : 0;
       break;
+    default:
+      break;
     }
-  default:
-    break;
   }
 }
 
@@ -101,7 +103,6 @@ void Menu_Show(SDL_Renderer *renderer, Menu type) {
   }
 
   // Set current menu option to the first button
-  // TODO :: Update selection with arrow keys
   current_selection = 0;
 }
 

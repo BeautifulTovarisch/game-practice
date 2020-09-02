@@ -1,6 +1,3 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-
 #include "mod.h"
 
 // Entity 0 is treated as a NULL id
@@ -9,25 +6,25 @@ Entity player = 0;
 SDL_Window *Game_Window = NULL;
 SDL_Renderer *Game_Renderer = NULL;
 
-bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
-               int flags) {
+int Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
+              int flags) {
 
   // Initialize SDL, returning success or failure
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
     printf("Initialization failed: %s\n", SDL_GetError());
-    return false;
+    return 0;
   }
 
   Game_Window = SDL_CreateWindow(title, x_pos, y_pos, width, height, flags);
   if (!Game_Window) {
     printf("Window creation failed: %s\n", SDL_GetError());
-    return false;
+    return 0;
   }
 
   Game_Renderer = SDL_CreateRenderer(Game_Window, -1, 0);
   if (!Game_Renderer) {
     printf("Renderer creation failed: %s\n", SDL_GetError());
-    return false;
+    return 0;
   }
 
   SDL_SetRenderDrawColor(Game_Renderer, 0, 0, 0, 255);
@@ -40,7 +37,7 @@ bool Game_Init(const char *title, int x_pos, int y_pos, int width, int height,
 
   printf("Initialization success.\n");
 
-  return true;
+  return 1;
 }
 
 void Game_Events() {
@@ -49,7 +46,7 @@ void Game_Events() {
   State *state = State_Get();
 
   while (SDL_PollEvent(&event)) {
-    // TODO :: Add state representing true program exit rather than game over.
+    // TODO :: Add state representing actual program exit rather than game over.
     if (state->game == GAME_OVER) {
       break;
     }
@@ -57,7 +54,9 @@ void Game_Events() {
     // Unconditionally handle quit, pause, etc...
     Input_HandleGameInput(event);
 
-    if (state->game & GAME_PAUSED == GAME_PAUSED) {
+    printf("Paused %d\n", state->game & GAME_PAUSED == GAME_PAUSED);
+    if (state->game == GAME_DEFAULT ||
+        state->game & GAME_PAUSED == GAME_PAUSED) {
       Menu_HandleInput(event);
     }
 
@@ -104,4 +103,4 @@ void Game_Clean() {
   printf("Cleanup complete.\n");
 }
 
-bool Game_IsRunning() { return State_Get()->game != GAME_OVER; }
+int Game_IsRunning() { return State_Get()->game != GAME_OVER; }

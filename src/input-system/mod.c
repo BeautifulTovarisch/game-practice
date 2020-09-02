@@ -55,16 +55,6 @@ void Input_HandleGameInput(SDL_Event event) {
   case SDL_QUIT:
     State_Update(GAME_END);
     break;
-  case SDL_KEYDOWN:
-    switch (event.key.keysym.sym) {
-    case SDLK_ESCAPE:
-      // Only allow toggling menu when game is started.
-      if (State_Get()->game & GAME_PLAY) {
-        State_Update(GAME_TOGGLE_PAUSE);
-      }
-      break;
-    }
-    break;
   default:
     break;
   }
