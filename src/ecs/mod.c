@@ -9,28 +9,27 @@ static World world;
 
 static void clear_components(Entity entity) {
   int index = entity_map[entity];
-
   int mask = world.component_mask[index];
 
-  if (mask & C_POSITION) {
+  if ((mask & C_POSITION) == C_POSITION) {
     world.position_components[index] = world.position_components[entity_count];
   }
-  if (mask & C_VELOCITY) {
+  if ((mask & C_VELOCITY) == C_VELOCITY) {
     world.velocity_components[index] = world.velocity_components[entity_count];
   }
-  if (mask & C_ACCELERATION) {
+  if ((mask & C_ACCELERATION) == C_ACCELERATION) {
     world.acceleration_components[index] =
         world.acceleration_components[entity_count];
   }
-  if (mask & C_APPEARANCE) {
+  if ((mask & C_APPEARANCE) == C_APPEARANCE) {
     world.appearance_components[index] =
         world.appearance_components[entity_count];
   }
-  if (mask & C_COLLISION) {
+  if ((mask & C_COLLISION) == C_COLLISION) {
     world.collision_components[index] =
         world.collision_components[entity_count];
   }
-  if (mask & C_SPRITE) {
+  if ((mask & C_SPRITE) == C_SPRITE) {
     world.sprite_components[index] = world.sprite_components[entity_count];
   }
 }
@@ -153,7 +152,7 @@ void ECS_RemoveComponent(Entity entity, ComponentType type) {
         world.appearance_components[entity_count];
     break;
   default:
-    NULL;
+    return;
   }
 
   world.component_mask[index] &= ~type;

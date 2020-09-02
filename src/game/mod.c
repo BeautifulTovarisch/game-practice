@@ -54,22 +54,21 @@ void Game_Events() {
     // Unconditionally handle quit, pause, etc...
     Input_HandleGameInput(event);
 
-    printf("Paused %d\n", state->game & GAME_PAUSED == GAME_PAUSED);
     if (state->game == GAME_DEFAULT ||
-        state->game & GAME_PAUSED == GAME_PAUSED) {
+        (state->game & GAME_PAUSED) == GAME_PAUSED) {
       Menu_HandleInput(event);
     }
 
     // If the game is in the play state and not paused.
-    if (state->game & GAME_PLAY == GAME_PLAY &&
-        state->game & GAME_PAUSED != GAME_PAUSED) {
+    if ((state->game & GAME_PLAY) == GAME_PLAY &&
+        (state->game & GAME_PAUSED) != GAME_PAUSED) {
       Input_HandlePlayerInput(player, event);
     }
   }
 }
 
 void Game_Update() {
-  if (State_Get()->game & GAME_PLAY == GAME_PLAY) {
+  if ((State_Get()->game & GAME_PLAY) == GAME_PLAY) {
     Physics_UpdatePosition();
   }
 }
@@ -84,7 +83,7 @@ void Game_Render() {
     Menu_Show(Game_Renderer, M_MAIN);
   }
 
-  if (State_Get()->game & GAME_PAUSED == GAME_PAUSED) {
+  if ((State_Get()->game & GAME_PAUSED) == GAME_PAUSED) {
     Menu_Show(Game_Renderer, M_PAUSE);
   }
 

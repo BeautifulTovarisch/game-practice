@@ -1,6 +1,8 @@
 #ifndef STATE_CONTROLLER_H
 #define STATE_CONTROLLER_H
 
+#include <stdio.h>
+
 #include "../util/vector/mod.h"
 
 // Buttons represented as Bitmask

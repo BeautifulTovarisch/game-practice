@@ -20,13 +20,10 @@ static void handle_selection() {
   case PLAY:
     State_Update(GAME_START);
     break;
-  case PAUSE:
-    break;
   case RESUME:
     break;
-  case EXIT:
-    break;
   case QUIT:
+    // TODO :: Show confirmation
     break;
   default:
     break;
@@ -37,9 +34,6 @@ void Menu_HandleInput(SDL_Event event) {
   switch (event.type) {
   case SDL_KEYDOWN:
     switch (event.key.keysym.sym) {
-    case SDLK_ESCAPE:
-      State_Update(GAME_TOGGLE_PAUSE);
-      break;
     case SDLK_RETURN:
       // Make Selection
       handle_selection();

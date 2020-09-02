@@ -52,6 +52,15 @@ void Input_HandlePlayerInput(Entity player, SDL_Event event) {
 // Input for general actions (e.g quitting, pausing)
 void Input_HandleGameInput(SDL_Event event) {
   switch (event.type) {
+  case SDL_KEYDOWN:
+    switch (event.key.keysym.sym) {
+    case SDLK_ESCAPE:
+      if ((State_Get()->game & GAME_PLAY) == GAME_PLAY) {
+        State_Update(GAME_TOGGLE_PAUSE);
+      }
+      break;
+    }
+    break;
   case SDL_QUIT:
     State_Update(GAME_END);
     break;
