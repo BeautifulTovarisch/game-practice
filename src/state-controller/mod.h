@@ -9,8 +9,7 @@ typedef struct MouseState {
   Vector position;
 } MouseState;
 
-/*
- * Game state represented here as a small bitmask, allowing for combos
+/* Game state represented here as a small bitmask, allowing for combos
  * such as: GAME_PLAY|GAME_PAUSED
  */
 typedef enum {
@@ -35,8 +34,6 @@ typedef enum {
 
 // Game state
 typedef struct State {
-  int menu_open;
-
   GameState game;
   MouseState mouse;
 } State;

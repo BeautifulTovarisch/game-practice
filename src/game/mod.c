@@ -57,20 +57,20 @@ void Game_Events() {
     // Unconditionally handle quit, pause, etc...
     Input_HandleGameInput(event);
 
-    if (state->menu_open) {
+    if (state->game & GAME_PAUSED == GAME_PAUSED) {
       Menu_HandleInput(event);
     }
 
-    if (state->game & GAME_PLAY == GAME_PLAY) {
+    // If the game is in the play state and not paused.
+    if (state->game & GAME_PLAY == GAME_PLAY &&
+        state->game & GAME_PAUSED != GAME_PAUSED) {
       Input_HandlePlayerInput(player, event);
     }
   }
 }
 
 void Game_Update() {
-  State_Get()->menu_open ? Menu_Show(Game_Renderer) : Menu_Hide();
-
-  if (State_Get()->game == GAME_PLAY) {
+  if (State_Get()->game & GAME_PLAY == GAME_PLAY) {
     Physics_UpdatePosition();
   }
 }
@@ -80,11 +80,22 @@ void Game_Render() {
 
   DS_Draw(Game_Renderer);
 
+  // Only show the main menu when game is in default state.
+  if (State_Get()->game == GAME_DEFAULT) {
+    Menu_Show(Game_Renderer, M_MAIN);
+  }
+
+  if (State_Get()->game & GAME_PAUSED == GAME_PAUSED) {
+    Menu_Show(Game_Renderer, M_PAUSE);
+  }
+
   SDL_RenderPresent(Game_Renderer);
 }
 
 void Game_Clean() {
   ECS_Cleanup();
+
+  Menu_Destroy();
 
   SDL_DestroyWindow(Game_Window);
   SDL_DestroyRenderer(Game_Renderer);

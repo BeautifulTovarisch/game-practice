@@ -15,9 +15,11 @@ static void handle_player_input(Entity player) {
   // TODO :: Ensure that only one horizontal input is handled
 
   if (key_down(key_state, SDL_SCANCODE_LEFT)) {
+    printf("LEFT KEY!\n");
     Physics_Accelerate(player, (Vector){.x = -1, .y = 0});
   }
   if (key_down(key_state, SDL_SCANCODE_RIGHT)) {
+    printf("RIGHT KEY!\n");
     Physics_Accelerate(player, (Vector){.x = 1, .y = 0});
   }
 
@@ -58,7 +60,6 @@ void Input_HandleGameInput(SDL_Event event) {
     case SDLK_ESCAPE:
       // Only allow toggling menu when game is started.
       if (State_Get()->game & GAME_PLAY) {
-        State_Update(MENU_TOGGLE);
         State_Update(GAME_TOGGLE_PAUSE);
       }
       break;

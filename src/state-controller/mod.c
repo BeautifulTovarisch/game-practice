@@ -4,15 +4,11 @@ static State state;
 
 void State_Init() {
   state = (State){.game = GAME_DEFAULT,
-                  .menu_open = 1,
                   .mouse = (MouseState){.buttons = 0, .position = (Vector){}}};
 };
 
 void State_Update(Action action) {
   switch (action) {
-  case MENU_TOGGLE:
-    state.menu_open = !state.menu_open;
-    break;
   case GAME_END:
     state.game = GAME_OVER;
     break;

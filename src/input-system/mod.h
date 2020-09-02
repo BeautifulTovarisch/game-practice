@@ -1,6 +1,8 @@
 #ifndef INPUT_SYSTEM_H
 #define INPUT_SYSTEM_H
 
+#include <stdio.h>
+
 #include <SDL2/SDL.h>
 
 #include "../ecs/components.h"

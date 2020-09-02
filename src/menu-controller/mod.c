@@ -1,9 +1,9 @@
 #include "mod.h"
 
-#define NUM_BUTTONS 1
+static int num_components;
+static int current_selection;
 
-// Order of sprites here corresponds to below.
-static char *sprites[NUM_BUTTONS] = {"assets/game_title.png"};
+static UIComponent components[5];
 
 /* Buttons are identified by their static positions:
  *   Button 0 - Play
@@ -13,15 +13,12 @@ static char *sprites[NUM_BUTTONS] = {"assets/game_title.png"};
  *   Button 4 - Quit
  */
 
-static int current_selection;
-static Entity buttons[NUM_BUTTONS];
-
 // Set state depending on button pressed
 static void handle_selection() {
   switch (current_selection) {
+    // Play button should only be shown on main menu
   case PLAY:
     State_Update(GAME_START);
-    State_Update(MENU_TOGGLE);
     break;
   case PAUSE:
     break;
@@ -47,11 +44,11 @@ void Menu_HandleInput(SDL_Event event) {
     case SDLK_UP:
       // TODO :: Consider wrap around of menu options
       current_selection =
-          current_selection > 0 ? current_selection-- : NUM_BUTTONS;
+          current_selection > 0 ? current_selection-- : num_components;
       break;
     case SDLK_DOWN:
       current_selection =
-          current_selection < NUM_BUTTONS ? current_selection++ : 0;
+          current_selection < num_components ? current_selection++ : 0;
       break;
     }
   default:
@@ -63,29 +60,44 @@ void Menu_HandleInput(SDL_Event event) {
  * Reusable method for hiding/showing menu at various points
  * TODO :: Consider removing entities and creating new each time
  */
-void Menu_Show(SDL_Renderer *renderer) {
-  int width, height, w_width, w_height;
+void Menu_Show(SDL_Renderer *renderer, Menu type) {
+  int width, height, w_width, w_height, num_components = 0;
 
-  for (int i = 0; i < NUM_BUTTONS; i++) {
-    SDL_Texture *tex = DS_LoadTexture(sprites[i], renderer);
+  SDL_Texture *tex;
 
+  SDL_GetRendererOutputSize(renderer, &w_width, &w_height);
+
+  switch (type) {
+  case M_MAIN:
+    tex = DS_LoadTexture("assets/game_title.png", renderer);
     SDL_QueryTexture(tex, NULL, NULL, &width, &height);
-    SDL_GetRendererOutputSize(renderer, &w_width, &w_height);
 
     int center_x = (w_width - width) / 2;
     int center_y = (w_height - height) / 2;
 
-    ECS_AddComponent(buttons[i],
-                     (Component){.type = C_SPRITE,
-                                 .component.sprite = {.texture = tex,
-                                                      .animated = 0,
-                                                      .width = width,
-                                                      .height = height}});
+    components[0] = (UIComponent){.x = center_x,
+                                  .y = center_y,
+                                  .width = width,
+                                  .option = PLAY,
+                                  .height = height,
+                                  .texture = tex};
+    num_components = 1;
+    break;
+  default:
+    return;
+  }
 
-    ECS_AddComponent(buttons[i],
-                     (Component){.type = C_POSITION,
-                                 .component.vector =
-                                     (Vector){.x = center_x, .y = center_y}});
+  // Draw ui components set above.
+  for (int i = 0; i < num_components; i++) {
+    UIComponent comp = components[i];
+    SDL_Rect src = {.w = comp.width, .h = comp.height};
+    SDL_Rect dest = {
+        .x = comp.x, .y = comp.y, .w = comp.width, .h = comp.height};
+
+    // Draw UI components
+    if (SDL_RenderCopy(renderer, comp.texture, &src, &dest) != 0) {
+      printf("Failed to draw texture: %s\n", SDL_GetError());
+    }
   }
 
   // Set current menu option to the first button
@@ -93,21 +105,11 @@ void Menu_Show(SDL_Renderer *renderer) {
   current_selection = 0;
 }
 
-/* Removing sprite and collision components will prevent the draw
- * and physics systems from handling the buttons void
- */
-void Menu_Hide() {
-  for (int i = 0; i < NUM_BUTTONS; i++) {
-    ECS_RemoveComponent(buttons[i], C_POSITION);
-    ECS_RemoveComponent(buttons[i], C_SPRITE);
+// Close menu, free up textures.
+void Menu_Destroy() {
+  for (int i = 0; i < num_components; i++) {
+    SDL_DestroyTexture(components[i].texture);
   }
 }
 
-void Menu_Init(SDL_Renderer *renderer) {
-  // Initialize buttons
-  for (int i = 0; i < NUM_BUTTONS; i++) {
-    buttons[i] = ECS_CreateEntity();
-  }
-
-  Menu_Show(renderer);
-}
+void Menu_Init(SDL_Renderer *renderer) { num_components = 0; }
